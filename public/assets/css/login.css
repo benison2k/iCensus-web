@@ -1,0 +1,344 @@
+/* public/assets/css/login.css */
+
+/* General Styles */
+body, html {
+    margin: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden; /* Prevents scrollbar during animation */
+}
+.split-screen {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* LEFT SIDE */
+.left-side {
+    flex: 1;
+    background: linear-gradient(135deg,#0d6efd,#6c63ff);
+    color: white;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Home Link */
+.home-link {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+    z-index: 10;
+}
+
+.home-link:hover {
+    color: #f8f9fa;
+}
+
+/* Circle-only logo background */
+.circle-bg-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    background: url('../assets/img/iCensusLogoOnly.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0.08;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Hero elements */
+.hero-logo {
+    max-width: 300px;
+    height: auto;
+    z-index: 2;
+    position: relative;
+}
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
+}
+.hero-subtitle {
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    z-index: 2;
+    position: relative;
+}
+.banner-image {
+    max-width: 70%;
+    height: auto;
+    z-index: 2;
+    position: relative;
+}
+
+/* Floating shapes */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: floatRotate 8s ease-in-out infinite alternate;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+}
+.shape1 { width: 140px; height: 140px; top: 10%; left: 15%; }
+.shape2 { width: 100px; height: 100px; bottom: 15%; right: 20%; }
+.shape3 { width: 180px; height: 180px; top: 35%; left: 50%; }
+
+@keyframes floatRotate {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(25px) rotate(15deg); }
+    100% { transform: translateY(0px) rotate(-15deg); }
+}
+
+/* Particle Canvas */
+#particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* RIGHT SIDE */
+.right-side {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Start hidden */
+    animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; /* 0.2s delay */
+}
+
+/* Login card invisible but content floats */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    padding: 2rem;
+    background-color: transparent;
+    box-shadow: none;
+    z-index: 2;
+}
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Card header */
+.card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.logo-img {
+    max-width: 160px;
+    height: auto;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+/* Inputs */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-wrapper input {
+    flex: 1;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    border: none;
+    background-color: rgba(255,255,255,0.9);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+.input-wrapper input:focus {
+    outline: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+.input-wrapper .input-icon,
+.input-wrapper .password-toggle {
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
+    color: #6c757d;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+}
+.input-wrapper input:focus + .input-icon,
+.input-wrapper input:focus + .password-toggle {
+    color: #0d6efd;
+}
+
+/* Button */
+.btn-primary {
+    border-radius: 12px;
+    padding: 0.6rem;
+    font-weight: 500;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Error */
+.form-control.error {
+    border-color: #dc3545 !important;
+}
+.error-text {
+    font-size: 0.85rem;
+    color: #dc3545;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Animation Keyframe */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .split-screen {
+        flex-direction: column;
+    }
+    .left-side,
+    .right-side {
+        flex: unset;
+        width: 100%;
+        padding: 1.5rem;
+    }
+    .banner-image {
+        max-width: 60%;
+    }
+    .circle-bg-logo {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+/* --- OTP MODAL STYLES (MOVED FROM INLINE) --- */
+#otpModal .modal-content {
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#otpModal h3 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+}
+
+#otpModal p.text-muted {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+}
+
+/* --- OTP 6-BOX INPUT STYLES --- */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 6px; /* Reduced gap */
+    margin: 20px 0;
+}
+.otp-input {
+    width: 38px;  /* Reduced width */
+    height: 48px; /* Reduced height */
+    font-size: 1.3rem; /* Reduced font size */
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    -moz-appearance: textfield; 
+}
+.otp-input:focus {
+    border-color: var(--gradient-start);
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+    outline: none;
+}
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#otpVerifyBtn {
+    background: linear-gradient(135deg, #0d6efd, #6c63ff);
+    color: #fff;
+    font-weight: 600;
+    margin-top: 15px !important;
+}
+
+#resendOtpBtn {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #6c757d !important;
+    transition: color 0.2s;
+    text-decoration: underline !important;
+}
+
+#resendOtpBtn:hover {
+    color: #0d6efd !important;
+}
+
+#cooldownTimer {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #0d6efd !important; /* Blue for the active countdown */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode #otpModal .modal-content {
+    background: #2C3E50;
+}
+
+body.dark-mode #otpModal h3 {
+    color: #ffffff;
+}
+
+body.dark-mode #otpModal p.text-muted {
+    color: #bbbbbb;
+}
+
+body.dark-mode .otp-input {
+    background: #1e1e2f;
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-mode #resendOtpBtn {
+    color: #9fa8da !important;
+}

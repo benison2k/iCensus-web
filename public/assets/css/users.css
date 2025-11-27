@@ -1,0 +1,188 @@
+.user-management-container {
+    padding: 0 2rem;
+    max-width: 1600px;
+    margin: auto;
+    width: 100%;
+    margin-bottom: 2rem; /* Added space before footer */
+}
+
+.add-user-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.user-table th,
+.user-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.user-table th:last-child,
+.user-table td:last-child {
+    border-right: none;
+}
+
+.user-table th { background-color: #f4f4f4; }
+
+.user-table tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+body.dark-mode .user-table tbody tr:hover {
+    background-color: rgba(77, 163, 255, 0.15);
+}
+
+.role-label {
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+.role-barangayadmin { background-color: #2e7d32; }
+.role-encoder { background-color: #0277bd; }
+
+/* Styles from old user.css, now deprecated by .action-btn */
+.action-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+.action-btn:hover { background-color: rgba(0,0,0,0.1); }
+.action-btn .material-icons { font-size: 1.2rem; vertical-align: middle; }
+
+/* --- STYLES MOVED FROM MANAGE_USERS.PHP --- */
+
+/* Styles for new icon buttons, copied from residents page */
+.actions-column { display: flex; gap: 0.5rem; align-items: center; }
+.action-btn {
+    padding: 0.5rem; border-radius: 50%; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border: none; cursor: pointer;
+    transition: background-color 0.2s;
+}
+.action-btn .material-icons { font-size: 20px; vertical-align: middle; }
+
+/* Light Mode Colors */
+.btn-edit { background-color: #e3f2fd; color: #0d6efd; }
+.btn-edit:hover { background-color: #bbdefb; }
+.btn-delete { background-color: #ffebee; color: #c62828; }
+.btn-delete:hover { background-color: #ffcdd2; }
+
+/* Dark Mode Colors */
+body.dark-mode .btn-edit { background-color: #1a3a5b; color: #90caf9; }
+body.dark-mode .btn-edit:hover { background-color: #0d6efd; }
+body.dark-mode .btn-delete { background-color: #3e2723; color: #ef9a9a; }
+body.dark-mode .btn-delete:hover { background-color: #c62828; }
+
+/* --- END MOVED STYLES --- */
+
+
+body.dark-mode .user-table { border-color: #4a5a6a; }
+body.dark-mode .user-table th { background-color: #3b4a59; }
+body.dark-mode .user-table td { border-color: #4a5a6a; }
+body.dark-mode .user-table tr { border-bottom-color: #3b4a59; }
+body.dark-mode .user-table tbody tr:nth-of-type(odd) {
+    background-color: #34495e;
+}
+
+/* Filter Styles for User and Log Pages */
+.filter-container {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 1.5rem;
+}
+
+.main-filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.3rem;
+}
+
+.filter-group input,
+.filter-group select {
+    border: 1px solid #ccc;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    outline: none;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.filter-group.search-filter {
+    flex-grow: 1;
+}
+
+.clear-btn {
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+    color: #333;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    height: 42px; /* Match height */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode .filter-container {
+    background-color: #1e1e2f;
+    border-color: #4a5a6a;
+}
+
+body.dark-mode .filter-group label {
+    color: #adb5bd;
+}
+
+body.dark-mode .filter-group input,
+body.dark-mode .filter-group select {
+    background-color: #2C3E50;
+    border-color: #4a5a6a;
+    color: #fff;
+}
+
+body.dark-mode .clear-btn {
+    background-color: #34495e;
+    border-color: #4a5a6a;
+    color: #fff;
+}

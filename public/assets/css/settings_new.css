@@ -1,0 +1,365 @@
+/* public/assets/css/settings_new.css */
+
+/* Base container for the new settings layout */
+.settings-container {
+    background-color: #fff;
+    border-radius: 16px;
+    width: 95%;
+    max-width: 1000px; /* Adjusted for a comfortable two-column layout */
+    height: 80vh; /* Using viewport height for responsiveness */
+    max-height: 600px;
+    display: flex;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeIn 0.4s ease-out;
+    overflow: hidden;
+    margin: 2rem auto; /* Center the container */
+}
+
+/* Left-side tab navigation */
+.settings-tabs {
+    flex: 0 0 220px; /* Slightly wider for better text fit */
+    border-right: 1px solid #e0e0e0;
+    padding: 1.5rem 0;
+    background-color: #f8f9fa; /* Light background for tabs */
+}
+
+.tab-button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+    border-right: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+    background-color: #e9ecef;
+}
+
+.tab-button.active {
+    background-color: #fff;
+    color: #0d6efd;
+    font-weight: 600;
+    border-right-color: #0d6efd;
+}
+
+/* Right-side content area */
+.settings-content {
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.tab-pane {
+    display: none; /* Hidden by default */
+}
+
+.tab-pane.active {
+    display: block; /* Show active tab content */
+    animation: fadeIn 0.3s;
+}
+
+.tab-pane h3 {
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+    outline: none;
+}
+
+/* General button styling */
+.settings-content button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #0d6efd;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.settings-content button:hover {
+    background-color: #0b5ed7;
+}
+
+/* Toggle switch styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+.switch input { display: none; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc; transition: .4s; border-radius: 28px;
+}
+.slider:before {
+    position: absolute; content: ""; height: 20px; width: 20px;
+    left: 4px; bottom: 4px; background-color: white;
+    transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: #28a745; }
+input:checked + .slider:before { transform: translateX(22px); }
+
+/* Dark Mode Adjustments */
+body.dark-mode .settings-container { background: #2C3E50; }
+body.dark-mode .settings-tabs { background-color: #233140; border-right-color: #4a5a6a; }
+body.dark-mode .tab-button { color: #ccc; }
+body.dark-mode .tab-button:hover { background-color: #2c3e50; }
+body.dark-mode .tab-button.active { background-color: #1e1e2f; border-right-color: #4da3ff; color: #4da3ff; }
+body.dark-mode .tab-pane h3 { color: #fff; }
+body.dark-mode .form-group label { color: #bbb; }
+body.dark-mode .form-group input, body.dark-mode .form-group select {
+    background-color: #1e1e2f;
+    border-color: #555;
+    color: #fff;
+}
+body.dark-mode .settings-content button {
+    background-color: #4da3ff;
+}
+body.dark-mode .settings-content button:hover {
+    background-color: #64b5f6;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Password Strength Indicator */
+.strength-meter {
+    height: 5px;
+    background: #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.strength-meter div {
+    height: 100%;
+    border-radius: 5px;
+    width: 0;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.strength-meter .weak {
+    width: 33%;
+    background-color: #dc3545;
+}
+
+.strength-meter .medium {
+    width: 66%;
+    background-color: #ffc107;
+}
+
+.strength-meter .strong {
+    width: 100%;
+    background-color: #28a745;
+}
+
+.strength-text {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6c757d;
+}
+
+body.dark-mode .strength-meter {
+    background: #1e1e2f;
+}
+/* --- START OTP 6-BOX INPUT STYLES --- */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 6px; /* Reduced gap */
+    margin: 20px 0;
+}
+.otp-input {
+    width: 38px;  /* Reduced width */
+    height: 48px; /* Reduced height */
+    font-size: 1.3rem; /* Reduced font size */
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    -moz-appearance: textfield; 
+}
+.otp-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+    outline: none;
+}
+body.dark-mode .otp-input {
+    background-color: #1e1e2f;
+    border-color: #555;
+    color: #fff;
+}
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* --- END OTP 6-BOX INPUT STYLES --- */
+
+
+/* --- Styles moved from index.php --- */
+
+/* Custom styles for the password/OTP form */
+.password-otp-group {
+    border: 1px solid var(--border-color, #ccc);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    background: var(--card-bg-light);
+}
+body.dark-mode .password-otp-group {
+    background: var(--card-bg-dark);
+    border-color: #555;
+}
+
+.password-otp-group h4 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+#otpPasswordField {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+#resendOtpBtnPass {
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline !important;
+    color: #0d6efd !important;
+    margin-top: 5px;
+    display: block;
+}
+#passwordOtpError {
+    margin-top: 10px;
+}
+
+/* Styles for 2FA Toggle Modal */
+#otpToggleModal .modal-content, #otpUnbindModal .modal-content {
+    max-width: 400px;
+}
+
+#otpToggleInput, #otpUnbindInput {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+}
+#resendToggleOtpBtn, #resendUnbindOtpBtn {
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline !important;
+    color: #0d6efd !important;
+    margin-top: 10px;
+}
+#otpToggleError, #otpUnbindError {
+    margin-top: 10px;
+}
+
+/* Styles for Web App Info Tab */
+.info-group {
+    margin-bottom: 1.5rem;
+}
+
+.info-group h4 {
+    font-size: 1.2rem;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+body.dark-mode .info-group h4 {
+    color: #fff;
+    border-bottom-color: #4a5a6a;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+
+.info-item strong {
+    font-weight: 600;
+}
+
+/* --- NEW: Button Group for Email Form --- */
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+#unbindEmailBtn {
+    background-color: #dc3545;
+}
+#unbindEmailBtn:hover {
+    background-color: #c82333;
+}
+body.dark-mode #unbindEmailBtn {
+    background-color: #c82333;
+}
+body.dark-mode #unbindEmailBtn:hover {
+    background-color: #a71d2a;
+}
+
+/* --- UPDATED SPINNER STYLES --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.spinner {
+    /* display: inline-block; <-- Removed, JS will handle display */
+    animation: spin 1s linear infinite;
+    font-size: 1.2rem !important; 
+}
+/* ----------------------------- */
