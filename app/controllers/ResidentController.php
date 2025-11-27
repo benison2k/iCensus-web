@@ -1,3 +1,5 @@
+// File: benison2k/icensus-web/iCensus-web-main/app/controllers/ResidentController.php
+
 <?php
 // app/controllers/ResidentController.php
 
@@ -156,17 +158,29 @@ class ResidentController {
                         log_action('INFO', 'RESIDENT_CREATE', "New resident record created: {$full_name} (ID#{$residentId}).");
                     } else {
                         $new_data = method_exists($residentModel, 'findAnyStatus') ? $residentModel->findAnyStatus($residentId) : $residentModel->find($residentId);
-                        $changes = array_diff_assoc($new_data, $old_data);
+                        
+                        // FIX 1: Ensure data is an array to prevent fatal errors with array_diff_assoc
+                        $safe_old_data = is_array($old_data) ? $old_data : [];
+                        $safe_new_data = is_array($new_data) ? $new_data : [];
+
+                        $changes = array_diff_assoc($safe_new_data, $safe_old_data);
                         $log_details = "Updated resident ID#{$residentId}.";
                         if (!empty($changes)) {
                             $log_details .= " Changes: ";
                             foreach($changes as $key => $value) {
-                                $log_details .= "{$key} changed from '{$old_data[$key]}' to '{$value}', ";
+                                // Use the safe array for indexing old data
+                                $old_value = isset($safe_old_data[$key]) ? $safe_old_data[$key] : 'N/A (Data Not Found)';
+                                $log_details .= "{$key} changed from '{$old_value}' to '{$value}', ";
                             }
                             $log_details = rtrim($log_details, ', ');
                             $log_details .= ".";
                         }
-                        log_action('INFO', 'RESIDENT_UPDATE', $log_details);
+                        
+                        // FIX 2: Limit log detail length to prevent DB column overflow errors leading to 500
+                        $MAX_LOG_LENGTH = 500; // Adjust this value if your DB column is different
+                        $final_log_details = (strlen($log_details) > $MAX_LOG_LENGTH) ? substr($log_details, 0, $MAX_LOG_LENGTH - 3) . '...' : $log_details;
+
+                        log_action('INFO', 'RESIDENT_UPDATE', $final_log_details);
                     }
                     
                     $savedResident = method_exists($residentModel, 'findAnyStatus') ? $residentModel->findAnyStatus($residentId) : $residentModel->find($residentId);
