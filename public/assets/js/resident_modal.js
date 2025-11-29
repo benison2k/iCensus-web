@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('residentForm');
     const modalTitle = document.getElementById('modalTitle');
     const closeBtn = modal.querySelector('.close');
-    const cancelBtn = modal.querySelector('.btn-cancel'); // If you have one
     
     // Buttons in the footer
     const editBtn = modal.querySelector('.editBtn');
@@ -145,7 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 
                 if(result.status === 'success') {
-                    alert('Resident deleted successfully');
+                    // Removed alert here as well if you want it silent, but usually deletes need confirmation
+                    alert('Resident deleted successfully'); 
                     closeModal();
                     location.reload(); // Refresh list
                 } else {
@@ -191,7 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    alert(result.message || 'Saved successfully');
+                    // --- FIX APPLIED HERE: REMOVED alert() ---
+                    // alert(result.message || 'Saved successfully'); 
                     closeModal();
                     location.reload();
                 } else {
