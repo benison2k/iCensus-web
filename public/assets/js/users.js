@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastIcon = document.getElementById('toastIcon');
     const toastMessage = document.getElementById('toastMessage');
 
-    const basePath = '/iCensus-ent/public';
+    // DO NOT DEFINE basePath HERE. It comes from PHP.
 
     // --- MODAL & FORM LOGIC ---
 
@@ -108,9 +108,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function openModalForEdit(id) {
         try {
-            const res = await fetch(`${basePath}/sysadmin/users/get?user_id=${id}`);
+            const url = `${basePath}/sysadmin/users/get?user_id=${id}`;
+            const res = await fetch(url);
+            
+            if (!res.ok) throw new Error(`Server returned status: ${res.status}`);
+
+            const contentType = res.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new Error("Server returned non-JSON response.");
+            }
+
             const result = await res.json();
-            if (result.status !== 'success') return alert('User not found.');
+
+            if (result.status !== 'success') {
+                return alert('User not found or error retrieving data.');
+            }
 
             const data = result.user;
             userForm.reset();
@@ -119,9 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             Object.keys(data).forEach(key => {
                 const el = userForm.elements[key];
-                if (el) el.value = data[key];
+                if (el && key !== 'password') {
+                    el.value = data[key];
+                }
             });
 
+            passwordInput.value = '';
+            confirmPasswordInput.value = '';
             passwordInput.removeAttribute('required');
             confirmPasswordInput.removeAttribute('required');
             passwordHelp.textContent = "Leave blank to keep current password.";
@@ -131,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'flex';
         } catch (err) {
             console.error('Failed to fetch user data:', err);
+            alert(`Error loading user: ${err.message}`);
         }
     }
 
@@ -141,17 +158,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const formData = new FormData(userForm);
-            const response = await fetch(userForm.action, {
+            const actionUrl = userForm.getAttribute('action');
+
+            const response = await fetch(actionUrl, {
                 method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' 
+                },
                 body: formData
             });
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text();
+                console.error("Server Error Response:", text);
+                throw new Error("Server Error: Received HTML instead of JSON. Check console.");
+            }
+
             const result = await response.json();
 
             if (response.ok && result.status === 'success') {
                 modal.style.display = 'none';
                 showToast(result.message, 'success');
                 
-                // Update local state instead of reloading
                 if (result.is_new) {
                     state.allUsers.push(result.user);
                 } else {
@@ -160,12 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         state.allUsers[index] = result.user;
                     }
                 }
-                applyFilters(); // Re-filter and render the table
+                applyFilters(); 
             } else {
                 alert(result.message || 'An error occurred.');
             }
         } catch (error) {
-            alert('A network error occurred. Please try again.');
+            console.error(error);
+            alert(`Error: ${error.message}`);
         } finally {
             saveUserBtn.disabled = false;
             saveUserBtn.querySelector('.material-icons').textContent = 'save';
@@ -179,15 +209,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`${basePath}/sysadmin/users/process`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', 
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 body: new URLSearchParams({ action: 'delete', 'user_id': id })
             });
             const result = await response.json();
             if (result.status === 'success') {
                 showToast(result.message || 'User deleted successfully.', 'success');
-                // Remove from local state
                 state.allUsers = state.allUsers.filter(u => u.id != id);
-                applyFilters(); // Re-filter and render
+                applyFilters(); 
             } else {
                 alert(result.message || 'Failed to delete user.');
             }
