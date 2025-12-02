@@ -1,23 +1,18 @@
 <?php
-// index.php (In the public_html root folder)
+// index.php
 
 // --- Define App Root ---
-// FIX 1: Since index.php is in the root, APP_ROOT is __DIR__.
 define('APP_ROOT', __DIR__ . '/');
 
-// ----------------------------------------------------------------------------------
-// FIX 2: Load core files EXPLICITLY using the defined APP_ROOT.
-// This resolves the "Class 'Database' not found" error permanently by guaranteeing the path.
-// ----------------------------------------------------------------------------------
+// --- Load Core Files ---
 require_once APP_ROOT . 'core/functions.php'; 
 require_once APP_ROOT . 'core/init.php';
-require_once APP_ROOT . 'core/Database.php'; // GUARANTEED FIX for the Fatal Error
+require_once APP_ROOT . 'core/Database.php';
 require_once APP_ROOT . 'core/Auth.php';     
 require_once APP_ROOT . 'core/Csrf.php';     
 
-// Autoloader for Controllers and Models
+// --- Autoloader ---
 spl_autoload_register(function ($class_name) {
-    // Uses APP_ROOT for stability
     $controller_file = APP_ROOT . "app/controllers/" . $class_name . '.php';
     if (file_exists($controller_file)) {
         require_once $controller_file;
@@ -29,13 +24,24 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
+// --- Dynamic Base Path Detection (THE FIX) ---
+// This automatically finds the folder the script is running in (e.g., /iCensus-ent/public)
+$script_name = $_SERVER['SCRIPT_NAME'];
+$base_path = str_replace('/index.php', '', $script_name);
+
+// Define a global constant for Views and Controllers to use
+define('BASE_URL', $base_path);
+
 // --- Router ---
 $request_uri = strtok($_SERVER["REQUEST_URI"], '?');
 
-// FIX 3: Set base path to empty string for the main domain root
-$base_path = ''; 
+// Remove the base path from the request URI to get the actual route
+if (strpos($request_uri, $base_path) === 0) {
+    $route = substr($request_uri, strlen($base_path));
+} else {
+    $route = $request_uri;
+}
 
-$route = str_replace($base_path, '', $request_uri);
 $route = trim($route, '/');
 $route = empty($route) ? 'home' : $route;
 
