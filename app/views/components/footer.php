@@ -1,9 +1,9 @@
 <?php
-// Base URL is mostly for links, handled by router, so kept empty or minimal.
-$base_url = '';
+// Use the global BASE_URL constant if defined, otherwise empty string
+$base_url = defined('BASE_URL') ? BASE_URL : '';
 ?>
 
-<link rel="stylesheet" href="/public/assets/css/footer.css">
+<link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/footer.css">
 
 <footer class="footer">
     <p>&copy; <?= date("Y") ?> iCensus System. All rights reserved.</p>
@@ -13,4 +13,6 @@ $base_url = '';
     <span class="material-icons">arrow_upward</span>
 </button>
 
-<script src="/public/assets/js/global.js"></script>
+<script src="<?= $base_url ?>/public/assets/js/global.js"></script>
+
+<script src="<?= $base_url ?>/public/assets/js/LogOutModal.js?v=<?= time() ?>"></script>

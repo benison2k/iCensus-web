@@ -25,6 +25,7 @@ if (strpos($requestUri, '/sysadmin/') !== false && !$isDashboardPage) {
 // 5. Check "Pinned Sidebar" preference
 if ($isUserLoggedIn && !isset($_SESSION['user']['sidebar_pinned'])) {
     try {
+        // Assume BASE_URL is defined in index.php or use empty string for paths
         $config = require __DIR__ . '/../../../config/database.php';
         $db = new Database($config);
         $conn = $db->getPdo();
@@ -43,12 +44,16 @@ $isSidebarPinned = isset($_SESSION['user']['sidebar_pinned']) && $_SESSION['user
 ?>
 
 <head>
-    <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
+    <link rel="icon" type="image/png" href="<?= $base_url ?>/public/assets/img/iCensusLogoOnly2.png">
     
-    <link rel="stylesheet" href="/public/assets/css/header2.css">
-    <link rel="stylesheet" href="/public/assets/css/sidebar.css"> 
+    <link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/header2.css">
+    <link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/sidebar.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script>
+        const appBasePath = "<?= $base_url ?>";
+    </script>
 
     <?php if ($isUserLoggedIn): ?>
     <script>
@@ -59,7 +64,7 @@ $isSidebarPinned = isset($_SESSION['user']['sidebar_pinned']) && $_SESSION['user
     </script>
     <?php endif; ?>
 
-    <script src="/public/assets/js/sidebar.js" defer></script>
+    <script src="<?= $base_url ?>/public/assets/js/sidebar.js" defer></script>
 </head>
 
 <?php if ($isSidebarPinned): ?>
@@ -85,7 +90,7 @@ $isSidebarPinned = isset($_SESSION['user']['sidebar_pinned']) && $_SESSION['user
 
     <div class="header-logo">
         <a href="<?= $dashboardLink ?>">
-            <img src="/public/assets/img/iCensusLogoSmaller.png" alt="iCensus Logo" class="logo">
+            <img src="<?= $base_url ?>/public/assets/img/iCensusLogoSmaller.png" alt="iCensus Logo" class="logo">
         </a>
     </div>
 
