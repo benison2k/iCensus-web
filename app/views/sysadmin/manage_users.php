@@ -4,24 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iCensus - Manage Users</title>
-<?php $base_url = '/iCensus-ent/public'; ?>
-<link rel="icon" type="image/png" href="<?= $base_url ?>/assets/img/iCensusLogoOnly2.png">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/style.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/dashboard.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/page_actions.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/residents_table.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/residents_filters.css"> 
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/users.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/user_modal.css">
+<link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
+<link rel="stylesheet" href="/public/assets/css/style.css">
+<link rel="stylesheet" href="/public/assets/css/dashboard.css">
+<link rel="stylesheet" href="/public/assets/css/page_actions.css">
+<link rel="stylesheet" href="/public/assets/css/residents_table.css">
+<link rel="stylesheet" href="/public/assets/css/residents_filters.css"> 
+<link rel="stylesheet" href="/public/assets/css/users.css">
+<link rel="stylesheet" href="/public/assets/css/user_modal.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="<?= $theme==='dark'?'dark-mode':'light-mode'; ?>">
 
 <?php include __DIR__ . '/../components/header.php'; ?>
 
-<div class="welcome"><h2>Manage Barangay Users</h2></div>
+<div class="welcome" style="margin-top: 110px;"><h2>Manage Barangay Users</h2></div>
 
-<main class="dashboard dashboard-management">
+<main class="dashboard dashboard-management" style="padding-top: 0;">
 <div class="user-management-container">
 
     <div class="page-actions-container">
@@ -126,7 +125,7 @@
 </div>
 </main>
 
-<?php $form_action = '/iCensus-ent/public/sysadmin/users/process'; ?>
+<?php $form_action = BASE_URL . '/sysadmin/users/process'; ?>
 <?php include __DIR__ . '/../components/user_modal.php'; ?>
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
@@ -136,13 +135,14 @@
 </div>
 
 <script>
-    // Pass all user data to the new JavaScript file
+    // FIX: Pass the dynamically detected BASE_URL from index.php to JS
+    const basePath = "<?= BASE_URL ?>"; 
     const allUsersData = <?= json_encode($all_users); ?>;
     const userRole = '<?= htmlspecialchars($user['role_name']) ?>';
     const assignableRoles = <?= json_encode($assignable_roles); ?>;
 </script>
 
-<script src="<?= $base_url ?>/assets/js/users.js"></script>
+<script src="/public/assets/js/users.js"></script>
 
 </body>
 </html>
