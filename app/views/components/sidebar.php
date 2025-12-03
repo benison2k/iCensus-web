@@ -48,19 +48,40 @@ $uri = $_SERVER['REQUEST_URI'] ?? '';
                 </a>
             </li>
             
-            <li>
-                <a href="<?= $base_url ?>/residents" class="<?= strpos($uri, 'residents') !== false ? 'active' : '' ?>">
-                    <span class="material-icons">groups</span>
-                    <span>Residents</span>
-                </a>
-            </li>
+            <?php if ($isAdmin): ?>
+                <li>
+                    <a href="<?= $base_url ?>/sysadmin/users" class="<?= strpos($uri, 'sysadmin/users') !== false ? 'active' : '' ?>">
+                        <span class="material-icons">group_add</span>
+                        <span>Manage Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= $base_url ?>/sysadmin/logs" class="<?= strpos($uri, 'sysadmin/logs') !== false ? 'active' : '' ?>">
+                        <span class="material-icons">receipt_long</span>
+                        <span>System Logs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= $base_url ?>/sysadmin/db-tools" class="<?= strpos($uri, 'db-tools') !== false ? 'active' : '' ?>">
+                        <span class="material-icons">storage</span>
+                        <span>DB Tools</span>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li>
+                    <a href="<?= $base_url ?>/residents" class="<?= strpos($uri, 'residents') !== false ? 'active' : '' ?>">
+                        <span class="material-icons">groups</span>
+                        <span>Residents</span>
+                    </a>
+                </li>
 
-            <li>
-                <a href="<?= $base_url ?>/analytics" class="<?= strpos($uri, 'analytics') !== false ? 'active' : '' ?>">
-                    <span class="material-icons">analytics</span>
-                    <span>Analytics</span>
-                </a>
-            </li>
+                <li>
+                    <a href="<?= $base_url ?>/analytics" class="<?= strpos($uri, 'analytics') !== false ? 'active' : '' ?>">
+                        <span class="material-icons">analytics</span>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+            <?php endif; ?>
 
             <li>
                 <a href="<?= $base_url ?>/settings" class="<?= strpos($uri, 'settings') !== false ? 'active' : '' ?>">
