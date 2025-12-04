@@ -1,31 +1,35 @@
 <?php
 // app/views/components/header.php
 
-// FIX: Set to empty string so links go to "/dashboard", not "/iCensus-ent/..."
-$base_url = ''; 
+// 1. LOAD CONFIGURATION
+// Go up 3 levels to find config.php in the root (app/views/components -> root)
+if (file_exists(__DIR__ . '/../../../config.php')) {
+    include __DIR__ . '/../../../config.php';
+} else {
+    $base_url = ''; // Fallback if config is missing
+}
 
-// 1. Check if a session is active and get user role
+// 2. Check if a session is active and get user role
 $isUserLoggedIn = isset($_SESSION['user']);
 $isAdmin = $isUserLoggedIn && ($_SESSION['user']['role_name'] === 'System Admin');
 $isEncoder = $isUserLoggedIn && ($_SESSION['user']['role_name'] === 'Encoder');
 
-// 2. Determine the correct dashboard link based on role
+// 3. Determine the correct dashboard link based on role
 $dashboardLink = $isAdmin ? $base_url . '/sysadmin/dashboard' : ($isEncoder ? $base_url . '/encoder-dashboard' : $base_url . '/dashboard');
 
-// 3. Get current page context to decide button visibility
+// 4. Get current page context to decide button visibility
 $requestUri = $_SERVER['REQUEST_URI'];
 $isDashboardPage = (strpos($requestUri, 'dashboard') !== false);
 
-// 4. Determine "Parent URL" for the Back button
+// 5. Determine "Parent URL" for the Back button
 $parentUrl = $dashboardLink; 
 if (strpos($requestUri, '/sysadmin/') !== false && !$isDashboardPage) {
     $parentUrl = $base_url . '/sysadmin/dashboard';
 }
 
-// 5. Check "Pinned Sidebar" preference
+// 6. Check "Pinned Sidebar" preference
 if ($isUserLoggedIn && !isset($_SESSION['user']['sidebar_pinned'])) {
     try {
-        // Assume BASE_URL is defined in index.php or use empty string for paths
         $config = require __DIR__ . '/../../../config/database.php';
         $db = new Database($config);
         $conn = $db->getPdo();
