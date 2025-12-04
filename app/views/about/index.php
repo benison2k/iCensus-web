@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About iCensus</title>
-    <?php $base_url = '/iCensus-ent/public'; ?>
-    <link rel="icon" type="image/png" href="/iCensus-ent/public/assets/img/iCensusLogoOnly2.png">
-    <link rel="stylesheet" href="<?= $base_url ?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?= $base_url ?>/assets/css/about.css">
+    <?php 
+        // LOAD CONFIGURATION (Go up 3 levels: app/views/about -> root)
+        if (file_exists(__DIR__ . '/../../../config.php')) {
+            include __DIR__ . '/../../../config.php';
+        } else {
+            $base_url = ''; 
+        }
+    ?>
+    <link rel="icon" type="image/png" href="<?= $base_url ?>/public/assets/img/iCensusLogoOnly2.png">
+    <link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/style.css">
+    <link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/about.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="<?= $theme === 'dark' ? 'dark-mode' : 'light-mode' ?>">
+<body class="<?= isset($theme) && $theme === 'dark' ? 'dark-mode' : 'light-mode' ?>">
 
     <?php include __DIR__ . '/../components/header.php'; ?>
 
@@ -82,6 +89,6 @@
 
     <?php include __DIR__ . '/../components/footer.php'; ?>
 
-    <script src="<?= $base_url ?>/assets/js/about.js"></script>
+    <script src="<?= $base_url ?>/public/assets/js/about.js"></script>
 </body>
 </html>
