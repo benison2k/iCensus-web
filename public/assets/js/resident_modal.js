@@ -22,6 +22,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabButtons = modal.querySelectorAll('.tab-button');
     const tabContents = modal.querySelectorAll('.tab-content');
 
+    // --- NEW: Progress Bar Logic ---
+    const progressBar = modal.querySelector('.progress-bar');
+    const progressLabel = modal.querySelector('.progress-label');
+
+    // Define the update function
+    const updateProgress = () => {
+        if (!form) return;
+        
+        // Select all required inputs (visible ones only if needed, but usually all required)
+        const requiredInputs = form.querySelectorAll('[required]');
+        let filledCount = 0;
+        let total = 0;
+
+        requiredInputs.forEach(input => {
+            // Check if the input is actually part of the current view (optional, but good practice)
+            // For now, we count all required fields in the form
+            total++;
+            if (input.value.trim() !== '') {
+                filledCount++;
+            }
+        });
+
+        // Avoid division by zero
+        const percentage = total === 0 ? 100 : Math.round((filledCount / total) * 100);
+
+        if (progressBar) progressBar.style.width = `${percentage}%`;
+        if (progressLabel) progressLabel.textContent = `Completion: ${percentage}%`;
+    };
+
+    // Attach function to modal DOM object so external scripts (like modalManager.js) can call modal.updateProgress()
+    modal.updateProgress = updateProgress;
+
+    // Attach event listeners to form inputs to update in real-time
+    if (form) {
+        form.addEventListener('input', updateProgress);
+        form.addEventListener('change', updateProgress);
+    }
+    // -------------------------------
+
     // --- Tab Switching Logic ---
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -39,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = () => {
         modal.style.display = 'none';
         if(form) form.reset();
+        
+        // Reset progress bar
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressLabel) progressLabel.textContent = 'Completion: 0%';
+
         // Reset tabs to first one
         tabButtons.forEach(btn => btn.classList.remove('active'));
         tabContents.forEach(content => content.classList.remove('active'));
@@ -51,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Open Modal (Global Function) ---
     window.openResidentModal = async (id = null, mode = 'view') => {
-        modal.style.display = 'flex'; // Use flex to center if your CSS supports it
+        modal.style.display = 'flex'; 
         
         // Hide all footer buttons first
         [editBtn, deleteBtn, saveBtn, approveBtn, declineBtn].forEach(btn => {
@@ -66,7 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mode === 'add') {
             modalTitle.textContent = 'Add New Resident';
             form.reset();
+            updateProgress(); // Reset bar
             if(saveBtn) saveBtn.style.display = 'inline-block';
+            
             // Clear hidden ID
             const idInput = form.querySelector('input[name="resident_id"]');
             if(idInput) idInput.value = '';
@@ -74,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // View or Edit mode - Fetch Data
             modalTitle.textContent = 'Loading...';
             try {
-                // FIX: Use correct path
                 const response = await fetch(`${BASE_URL}/residents/process?action=get&id=${id}`);
                 const result = await response.json();
 
@@ -94,11 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
+                    updateProgress(); // Update bar with loaded data
+
                     // Handle Mode Specific Buttons
                     if (mode === 'view') {
                         if(editBtn) editBtn.style.display = 'inline-block';
                         if(deleteBtn) deleteBtn.style.display = 'inline-block';
-                        // Add ID to buttons for later use
                         if(editBtn) editBtn.dataset.id = id;
                         if(deleteBtn) deleteBtn.dataset.id = id;
                     } else if (mode === 'edit') {
@@ -133,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('action', 'delete');
                 formData.append('id', id);
-                // Add CSRF if available in a meta tag or hidden input elsewhere
                 const csrfInput = document.querySelector('input[name="csrf_token"]');
                 if(csrfInput) formData.append('csrf_token', csrfInput.value);
 
@@ -144,10 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 
                 if(result.status === 'success') {
-                    // Removed alert here as well if you want it silent, but usually deletes need confirmation
                     alert('Resident deleted successfully'); 
                     closeModal();
-                    location.reload(); // Refresh list
+                    location.reload(); 
                 } else {
                     alert(result.message || 'Delete failed');
                 }
@@ -158,50 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Basic Validation
-            const required = form.querySelectorAll('[required]');
-            let isValid = true;
-            required.forEach(field => {
-                if(!field.value.trim()) {
-                    isValid = false;
-                    field.style.borderColor = 'red';
-                } else {
-                    field.style.borderColor = '';
-                }
-            });
-
-            if(!isValid) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-
-            const formData = new FormData(form);
-            // Ensure action is set
-            formData.append('action', 'save');
-
-            try {
-                const response = await fetch(`${BASE_URL}/residents/process`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    // --- FIX APPLIED HERE: REMOVED alert() ---
-                    // alert(result.message || 'Saved successfully'); 
-                    closeModal();
-                    location.reload();
-                } else {
-                    alert(result.message || 'Save failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while saving.');
-            }
-        });
-    }
+    // --- FIX: REMOVED THE DUPLICATE FORM SUBMISSION LISTENER ---
+    // The 'submit' event is now handled exclusively by public/assets/js/resident/formHandler.js
 });
