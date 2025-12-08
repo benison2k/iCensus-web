@@ -92,7 +92,14 @@
                 <a id="approveBtn" href="#" class="modal-footer-btn" style="display: none; background-color: #28a745; color: white;"><span class="material-icons">check</span> Approve</a>
                 <a id="declineBtn" href="#" class="modal-footer-btn" style="display: none; background-color: #dc3545; color: white;"><span class="material-icons">close</span> Decline</a>
                 <button type="button" class="modal-footer-btn btn-edit editBtn"><span class="material-icons">edit</span> Edit</button>
-                <button type="button" class="modal-footer-btn btn-delete deleteBtn"><span class="material-icons">delete</span> Delete</button>
+                
+                <?php 
+                // ONLY SHOW DELETE BUTTON IF USER IS NOT AN ENCODER
+                if (isset($user) && $user['role_name'] !== 'Encoder'): 
+                ?>
+                    <button type="button" class="modal-footer-btn btn-delete deleteBtn"><span class="material-icons">delete</span> Delete</button>
+                <?php endif; ?>
+
                 <button type="submit" id="saveBtn" class="modal-footer-btn btn-save" style="display:none;"><span class="material-icons">save</span> Save</button>
             </div>
         </form>
