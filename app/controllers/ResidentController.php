@@ -1,10 +1,6 @@
-// File: benison2k/icensus-web/iCensus-web-main/app/controllers/ResidentController.php
-
 <?php
 // app/controllers/ResidentController.php
 
-// FIX: Only require files immediately relevant to the controller (functions, models).
-// Core classes (Database, Auth, Csrf) are now guaranteed to be loaded by index.php.
 require_once __DIR__ . '/../../core/functions.php';
 require_once __DIR__ . '/../models/Residents.php';
 
@@ -12,11 +8,9 @@ class ResidentController {
     
     // Helper function to initialize DB connection quickly
     private function getDb() {
-        // Class Database is now defined by the index.php bootstrap file.
-        // The path to config is correct relative to the controller.
         $config = require __DIR__ . '/../../config/database.php';
         $db = new Database($config); 
-        $GLOBALS['db'] = $db; // Keeps DB accessible for log_action helper function
+        $GLOBALS['db'] = $db; 
         return $db;
     }
     
@@ -29,8 +23,7 @@ class ResidentController {
              die("<h1>403 Forbidden</h1>");
         }
 
-        $db = $this->getDb(); // Initialize DB
-        // Auth is available globally due to index.php
+        $db = $this->getDb(); 
         $auth = new Auth($db);
         $auth->refreshUserSession($_SESSION['user']['id']);
 
@@ -128,12 +121,42 @@ class ResidentController {
         try {
             switch ($action) {
                 
+                case 'check_duplicate':
+                    $fname = trim($_POST['first_name'] ?? '');
+                    $lname = trim($_POST['last_name'] ?? '');
+                    $dob   = $_POST['dob'] ?? '';
+                    $id    = $_POST['resident_id'] ?? null;
+
+                    if ($fname && $lname && $dob) {
+                        $duplicate = $residentModel->findDuplicate($fname, $lname, $dob, $id);
+                        if ($duplicate) {
+                            echo json_encode(['status' => 'found', 'resident' => $duplicate]);
+                        } else {
+                            echo json_encode(['status' => 'ok']);
+                        }
+                    } else {
+                        echo json_encode(['status' => 'ok']); 
+                    }
+                    break;
+                
                 case 'save':
-                    // CSRF Check (Class is guaranteed to exist now)
+                    // CSRF Check
                     if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
                         echo json_encode(['status' => 'error', 'message' => 'Security Token Invalid. Please reload.']);
                         exit;
                     }
+
+                    // Server-Side Validation
+                    $validationError = $this->validateResidentData($_POST);
+                    if ($validationError) {
+                        echo json_encode(['status' => 'error', 'message' => $validationError]);
+                        exit;
+                    }
+
+                    // Sanitize inputs
+                    $_POST = array_map(function($value) {
+                        return is_string($value) ? trim($value) : $value;
+                    }, $_POST);
 
                     $resident_id_post = $_POST['resident_id'] ?? null;
                     $is_new = empty($resident_id_post);
@@ -159,7 +182,6 @@ class ResidentController {
                     } else {
                         $new_data = method_exists($residentModel, 'findAnyStatus') ? $residentModel->findAnyStatus($residentId) : $residentModel->find($residentId);
                         
-                        // FIX 1: Ensure data is an array to prevent fatal errors with array_diff_assoc
                         $safe_old_data = is_array($old_data) ? $old_data : [];
                         $safe_new_data = is_array($new_data) ? $new_data : [];
 
@@ -168,7 +190,6 @@ class ResidentController {
                         if (!empty($changes)) {
                             $log_details .= " Changes: ";
                             foreach($changes as $key => $value) {
-                                // Use the safe array for indexing old data
                                 $old_value = isset($safe_old_data[$key]) ? $safe_old_data[$key] : 'N/A (Data Not Found)';
                                 $log_details .= "{$key} changed from '{$old_value}' to '{$value}', ";
                             }
@@ -176,8 +197,7 @@ class ResidentController {
                             $log_details .= ".";
                         }
                         
-                        // FIX 2: Limit log detail length to prevent DB column overflow errors leading to 500
-                        $MAX_LOG_LENGTH = 500; // Adjust this value if your DB column is different
+                        $MAX_LOG_LENGTH = 500; 
                         $final_log_details = (strlen($log_details) > $MAX_LOG_LENGTH) ? substr($log_details, 0, $MAX_LOG_LENGTH - 3) . '...' : $log_details;
 
                         log_action('INFO', 'RESIDENT_UPDATE', $final_log_details);
@@ -235,6 +255,34 @@ class ResidentController {
             echo json_encode(['status' => 'error', 'message' => 'An internal error occurred: ' . $e->getMessage()]);
         }
         exit;
+    }
+
+    private function validateResidentData($data) {
+        $allowedGender = ['Male', 'Female'];
+        if (!in_array($data['gender'], $allowedGender)) {
+            return "Invalid gender selected.";
+        }
+
+        if (!empty($data['civil_status'])) {
+            $allowedCivil = ['Single', 'Married', 'Widowed', 'Separated'];
+            if (!in_array($data['civil_status'], $allowedCivil)) {
+                return "Invalid civil status selected.";
+            }
+        }
+
+        $dob = new DateTime($data['dob']);
+        $now = new DateTime();
+        if ($dob > $now) {
+            return "Date of birth cannot be in the future.";
+        }
+
+        if (!empty($data['contact_number'])) {
+            if (!preg_match('/^09\d{9}$/', $data['contact_number'])) {
+                return "Contact number must match the format 09XXXXXXXXX.";
+            }
+        }
+
+        return null;
     }
 
     public function approve() {

@@ -8,7 +8,7 @@
             <span class="close" style="font-size:1.8rem; cursor:pointer;"><span class="material-icons">close</span></span>
         </div>
         
-        <form id="residentForm" method="POST" action="/residents/process" style="display: contents;">
+        <form id="residentForm" method="POST" action="/residents/process" style="display: contents;" novalidate>
             
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::generate()); ?>">
 
@@ -94,7 +94,6 @@
                 <button type="button" class="modal-footer-btn btn-edit editBtn"><span class="material-icons">edit</span> Edit</button>
                 
                 <?php 
-                // ONLY SHOW DELETE BUTTON IF USER IS NOT AN ENCODER
                 if (isset($user) && $user['role_name'] !== 'Encoder'): 
                 ?>
                     <button type="button" class="modal-footer-btn btn-delete deleteBtn"><span class="material-icons">delete</span> Delete</button>
