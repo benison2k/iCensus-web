@@ -1,5 +1,5 @@
 <?php
-// /app/models/Resident.php
+// app/models/Residents.php
 
 class Resident {
     private $pdo;
@@ -9,12 +9,11 @@ class Resident {
     }
 
     /**
-     * NEW: Generic function to get distinct, non-empty values from a column.
+     * Generic function to get distinct, non-empty values from a column.
      * @param string $column The name of the column.
      * @return array
      */
     public function getDistinctValues($column) {
-        // The query is built to be safe as the column name is controlled internally.
         $stmt = $this->pdo->prepare("
             SELECT DISTINCT {$column} 
             FROM residents 
@@ -62,7 +61,6 @@ class Resident {
      * @return array
      */
     public function getAll() {
-        // MODIFIED: This now only fetches residents that have been approved.
         $sql = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) as age 
                 FROM residents 
                 WHERE approval_status = 'approved' 
@@ -72,7 +70,7 @@ class Resident {
     }
 
     /**
-     * NEW: Fetches all residents awaiting approval.
+     * Fetches all residents awaiting approval.
      * @return array
      */
     public function getPending() {
@@ -87,11 +85,9 @@ class Resident {
     public function getPendingPaginated($page = 1, $pageSize = 10) {
         $offset = ($page - 1) * $pageSize;
 
-        // Get total count
         $countStmt = $this->pdo->query("SELECT COUNT(*) FROM residents WHERE approval_status = 'pending'");
         $total = $countStmt->fetchColumn();
 
-        // Get paginated results
         $stmt = $this->pdo->prepare("
             SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) as age 
             FROM residents 
@@ -111,32 +107,17 @@ class Resident {
         ];
     }
 
-    /**
-     * NEW: Gets the count of pending residents for notification badges.
-     * @return int
-     */
     public function getPendingCount() {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM residents WHERE approval_status = 'pending'");
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Finds a single resident by their ID. (No changes needed here)
-     * @param int $id
-     * @return mixed
-     */
     public function find($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM residents WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * FIX: New method to find a resident regardless of approval status.
-     * This is required for the modal to view/edit pending entries without error.
-     * @param int $id
-     * @return mixed
-     */
     public function findAnyStatus($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM residents WHERE id = ?");
         $stmt->execute([$id]);
@@ -144,10 +125,29 @@ class Resident {
     }
 
     /**
-     * Saves a resident's data (creates or updates). (No changes needed here)
-     * @param array $data
-     * @return int The ID of the saved resident.
+     * NEW: Checks if a resident with the same name and birthdate already exists.
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $dob
+     * @param int|null $excludeId (Optional) Exclude a specific ID (for updates)
+     * @return array|false
      */
+    public function findDuplicate($firstName, $lastName, $dob, $excludeId = null) {
+        $sql = "SELECT id, first_name, last_name, dob, approval_status 
+                FROM residents 
+                WHERE first_name = ? AND last_name = ? AND dob = ?";
+        $params = [$firstName, $lastName, $dob];
+
+        if ($excludeId) {
+            $sql .= " AND id != ?";
+            $params[] = $excludeId;
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function save($data) {
         if (empty($data['resident_id'])) {
             // Create new resident
@@ -176,20 +176,12 @@ class Resident {
         }
     }
 
-    /**
-     * NEW: Approves a resident.
-     * @param int $id The ID of the resident to approve.
-     * @param int $adminId The ID of the admin approving.
-     * @return bool
-     */
     public function approve($id, $adminId) {
-        // --- THIS IS THE FIX: Added date_approved = NOW() ---
         $stmt = $this->pdo->prepare("UPDATE residents SET approval_status = 'approved', approved_by = ?, date_approved = NOW() WHERE id = ?");
         return $stmt->execute([$adminId, $id]);
     }
 
     public function approveAll($adminId) {
-        // --- THIS IS THE FIX: Added date_approved = NOW() ---
         $stmt = $this->pdo->prepare(
             "UPDATE residents SET approval_status = 'approved', approved_by = ?, date_approved = NOW() WHERE approval_status = 'pending'"
         );
@@ -197,33 +189,16 @@ class Resident {
         return $stmt->rowCount();
     }
 
-    /**
-     * NEW: Rejects (deletes) a pending resident entry.
-     * @param int $id The ID of the resident to reject.
-     * @return bool
-     */
     public function reject($id) {
-        // This permanently deletes the pending record.
-        // If you'd rather set approval_status to 'rejected', change DELETE to UPDATE.
         $stmt = $this->pdo->prepare("DELETE FROM residents WHERE id = ? AND approval_status = 'pending'");
         return $stmt->execute([$id]);
     }
 
-    /**
-     * Deletes a resident by their ID. (No changes needed here)
-     * @param int $id
-     * @return bool
-     */
     public function delete($id) {
         $stmt = $this->pdo->prepare("DELETE FROM residents WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    /**
-     * NEW: Generic function to get filtered residents based on URL params
-     * @param array $filters The filter parameters from the request.
-     * @return array
-     */
     public function getFiltered($filters) {
         $query = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) as age FROM residents WHERE approval_status = 'approved'";
         $params = [];
@@ -290,7 +265,6 @@ class Resident {
             $params[] = $filters['relationship'];
         }
 
-        // --- ADDED FILTER LOGIC ---
         if (!empty($filters['generation'])) {
             $generation = $filters['generation'];
             $yearCondition = '';
@@ -338,11 +312,6 @@ class Resident {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * NEW: Gets submission statistics for a specific encoder.
-     * @param int $encoderId The ID of the encoder.
-     * @return array
-     */
     public function getStatsForEncoder($encoderId) {
         $stats = [];
 
@@ -364,12 +333,6 @@ class Resident {
         return $stats;
     }
     
-    /**
-     * NEW: Gets the most recent submission activity for a specific encoder.
-     * @param int $encoderId The ID of the encoder.
-     * @param int $limit The maximum number of entries to return.
-     * @return array
-     */
     public function getRecentByEncoder($encoderId, $limit = 5) {
         $sql = "SELECT first_name, last_name, created_at, approval_status 
                 FROM residents 
