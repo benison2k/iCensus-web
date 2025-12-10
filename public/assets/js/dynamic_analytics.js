@@ -1,5 +1,13 @@
 // public/assets/js/dynamic_analytics.js
 
+// --- NEW: Define a reusable loading spinner HTML structure ---
+const LOADING_SPINNER_HTML = `
+    <div class="loading-placeholder">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading data...</div>
+    </div>
+`;
+
 // Load Google Charts and create a global promise that resolves when it's ready.
 window.googleChartsPromise = new Promise(resolve => {
     google.charts.load('current', { 'packages': ['corechart', 'bar'] });
@@ -23,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // FIX: Handle the specific close button structure in resident_modal2.php
+        // Handle the specific close button structure in resident_modal2.php
         const residentClose = modal.querySelector('.close');
         if (residentClose && modal.id === 'residentModal') {
             residentClose.addEventListener('click', () => {
@@ -52,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// FIX: Set basePath to empty string for root domain
 const basePath = '';
 let grid;
 let currentResidentList = [];
@@ -62,7 +69,6 @@ let currentSort = { column: 'first_name', order: 'asc' };
  * Initializes the tab switching and progress bar for the analytics resident detail modal.
  */
 function initializeAnalyticsModal() {
-    // Target the component's ID directly
     const modal = document.getElementById('residentModal');
     if (!modal) return;
 
@@ -76,7 +82,6 @@ function initializeAnalyticsModal() {
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
             button.classList.add('active');
-            // The component uses IDs like #tab-personal, #tab-household
             const targetTab = modal.querySelector(`#tab-${button.dataset.tab}`);
             if (targetTab) targetTab.classList.add('active');
         });
@@ -185,12 +190,15 @@ async function loadUserCharts() {
             for (const chartDef of chartsToDisplay) {
                 const chartId = chartDef.id.toString();
 
+                // --- UPDATED: Use the loading spinner constant here ---
                 const widgetHtml = `
                     <div class="grid-stack-item-content chart-container" 
                          data-chart-id="${chartId}" 
                          data-group-by="${chartDef.group_by_column || ''}">
                         <div class="chart-title">${chartDef.title}</div>
-                        <div class="chart-div" id="chart-div-${chartId}">Loading...</div>
+                        <div class="chart-div" id="chart-div-${chartId}">
+                            ${LOADING_SPINNER_HTML}
+                        </div>
                     </div>`;
                 
                 const layoutItem = savedLayout.find(item => item.id === chartId);
@@ -332,6 +340,7 @@ function renderResidentList() {
 
 async function showFilteredResidents(filterColumn, category, startDate, endDate) {
     const residentListContainer = document.getElementById('residentListContainer');
+    // Using a simpler loader here or you can use the same spinner
     residentListContainer.innerHTML = '<div class="list-placeholder">Loading residents...</div>';
     currentSort = { column: 'first_name', order: 'asc' };
 
@@ -361,7 +370,8 @@ async function redrawDashboardChart(chartId, startDate, endDate) {
     const chartDiv = document.getElementById(`chart-div-${chartId}`);
     if (!chartDiv) return;
 
-    chartDiv.innerHTML = 'Loading...'; 
+    // --- UPDATED: Use the spinner HTML here as well ---
+    chartDiv.innerHTML = LOADING_SPINNER_HTML; 
 
     let dataUrl = `${basePath}/charts/data?chart_id=${chartId}`;
     if (startDate && endDate) {
@@ -560,12 +570,10 @@ async function openResidentDetailsModal(residentId) {
     const firstTabContent = modal.querySelector('#tab-personal');
     if (firstTabContent) firstTabContent.classList.add('active');
 
-    // FIX: Use 'flex' and explicit properties to center the modal
     modal.style.display = 'flex'; 
     modal.style.justifyContent = 'center';
     modal.style.alignItems = 'center';
     
-    // Ensure the close button inside the component works
     const componentCloseBtn = modal.querySelector('.close');
     if (componentCloseBtn) {
          componentCloseBtn.onclick = () => { modal.style.display = 'none'; };
@@ -683,6 +691,9 @@ window.addChartToDashboard = async function(chartDef) {
         const dataResult = await dataResponse.json();
 
         if (dataResult.status === 'success') {
+            // --- UPDATED: Use the spinner HTML here too if needed, but here we usually have data ready ---
+            // If data is fetched *before* drawing, we can render directly.
+            
             const widgetHtml = `
                 <div class="grid-stack-item-content chart-container" 
                      data-chart-id="${chartId}" 
@@ -699,7 +710,6 @@ window.addChartToDashboard = async function(chartDef) {
             
             drawChart(chartId, dataResult.type, dataResult.data);
             
-            // FIX: Add the new chart to the visible list immediately
             let visibleChartIds = JSON.parse(localStorage.getItem('visibleChartIds')) || [];
             const chartIdStr = chartId.toString();
             if (!visibleChartIds.includes(chartIdStr)) {
@@ -707,7 +717,6 @@ window.addChartToDashboard = async function(chartDef) {
                 localStorage.setItem('visibleChartIds', JSON.stringify(visibleChartIds));
             }
 
-            // FIX: Trigger autosave to persist the new layout
             saveLayout(true);
         } else {
             alert('Could not dynamically add chart. Please refresh the page.');
