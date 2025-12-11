@@ -112,4 +112,64 @@ class Email {
             return false;
         }
     }
+
+    /**
+     * Sends a support message from a user to the System Admin.
+     */
+    public function sendSupportMessage($adminEmail, $replyToEmail, $replyToName, $subject, $messageBody) {
+        $mail = new PHPMailer(true);
+        
+        try {
+            // Server settings (reuse OTP credentials or create new ENV vars for support)
+            $mail->isSMTP();
+            $mail->Host       = $_ENV['SMTP_HOST'] ?? 'smtp.gmail.com'; 
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $_ENV['OTP_USERNAME']; 
+            $mail->Password   = $_ENV['OTP_PASSWORD']; 
+            
+            $secure_env = $_ENV['SMTP_SECURE'] ?? 'tls';
+            if ($secure_env === 'PHPMailer::ENCRYPTION_STARTTLS') {
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            } else {
+                $mail->SMTPSecure = $secure_env;
+            }
+            
+            $mail->Port       = $_ENV['SMTP_PORT'] ?? 587;
+            
+            // Sender Info
+            $fromEmail = $_ENV['EMAIL_DEFAULT_FROM'] ?? 'no-reply@icensus.com';
+            $mail->setFrom($fromEmail, 'iCensus Support System');
+            
+            // The "Reply-To" is the user asking for help so you can reply directly to them
+            $mail->addReplyTo($replyToEmail, $replyToName);
+            
+            // Recipient is the System Admin
+            $mail->addAddress($adminEmail);
+            
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = "[Support Request] " . $subject;
+            $mail->Body    = "
+                <h3>New Support Request</h3>
+                <p><strong>From:</strong> {$replyToName} ({$replyToEmail})</p>
+                <p><strong>Subject:</strong> {$subject}</p>
+                <hr>
+                <p><strong>Message:</strong></p>
+                <div style='background-color: #f9f9f9; padding: 15px; border-left: 4px solid #0d6efd;'>
+                    " . nl2br(htmlspecialchars($messageBody)) . "
+                </div>
+                <hr>
+                <p><small>This email was sent from the iCensus About Page contact form.</small></p>
+            ";
+            $mail->AltBody = "From: {$replyToName} ({$replyToEmail})\n\nSubject: {$subject}\n\nMessage:\n{$messageBody}";
+            
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            if (function_exists('log_action') && isset($GLOBALS['db'])) {
+                log_action('ERROR', 'SUPPORT_EMAIL_FAIL', "Mailer Error: {$mail->ErrorInfo}");
+            }
+            return false;
+        }
+    }
 }

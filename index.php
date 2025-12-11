@@ -24,18 +24,14 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-// --- Dynamic Base Path Detection (THE FIX) ---
-// This automatically finds the folder the script is running in (e.g., /iCensus-ent/public)
+// --- Dynamic Base Path Detection ---
 $script_name = $_SERVER['SCRIPT_NAME'];
 $base_path = str_replace('/index.php', '', $script_name);
-
-// Define a global constant for Views and Controllers to use
 define('BASE_URL', $base_path);
 
 // --- Router ---
 $request_uri = strtok($_SERVER["REQUEST_URI"], '?');
 
-// Remove the base path from the request URI to get the actual route
 if (strpos($request_uri, $base_path) === 0) {
     $route = substr($request_uri, strlen($base_path));
 } else {
@@ -211,6 +207,11 @@ switch ($route) {
         break;
     case 'settings/sidebar-mode':
         (new SettingsController())->updateSidebarMode();
+        break;
+
+    // --- Contact Support Route (NEW) ---
+    case 'contact/submit':
+        (new ContactController())->submit();
         break;
 
     // --- System Admin Routes ---
