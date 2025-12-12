@@ -1,5 +1,6 @@
 /* ========================
    Modern About Page Styles
+   [File: public/assets/css/about.css]
 ======================== */
 
 .about-container {
@@ -32,11 +33,19 @@
     position: relative;
 }
 
-.hero-icon-bg img {
-    width: 90px;
-    height: 90px;
+/* FIX: This ensures the container doesn't collapse */
+.hero-icon-bg {
+    display: block;
     margin-bottom: 1.5rem;
-    opacity: 1;
+}
+
+/* FIX: The logo styling */
+.hero-icon-bg img {
+    width: 150px;       /* Set a fixed width */
+    height: auto;       /* AUTO height prevents squeezing/distortion */
+    object-fit: contain; /* Ensures the image fits naturally */
+    display: inline-block;
+    margin: 0 auto;
 }
 
 .about-hero h1 {
