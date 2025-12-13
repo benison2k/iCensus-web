@@ -7,6 +7,8 @@
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border: 1px solid #ddd;
+    /* FIX: Added margin-bottom to prevent touching the footer */
+    margin-bottom: 3rem; 
 }
 
 /* This is the key change for attachment */

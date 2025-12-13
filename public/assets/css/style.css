@@ -84,7 +84,9 @@ footer {
 main.dashboard {
     /* Inherits flex: 1 from above */
     padding-top: 90px; /* Space for the fixed header (90px) */
-    padding-bottom: 50px; /* Space for the fixed footer (50px) */
+    
+    /* FIX: Increased padding-bottom to 100px to ensure content never touches the 50px footer */
+    padding-bottom: 100px; 
 }
 
 
