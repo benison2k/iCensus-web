@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formData = new FormData();
                 formData.append('id', logId);
 
-                // Send a request to the server to mark it as seen
-                fetch('/iCensus-ent/public/sysadmin/logs/mark-as-seen', {
+                // FIX: Use basePath for the URL
+                fetch(`${basePath}/sysadmin/logs/mark-as-seen`, {
                     method: 'POST',
                     body: formData
                 }).catch(error => console.error('Error marking log as seen:', error));
@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const markAllSeenBtn = document.getElementById('markAllSeenBtn');
     if (markAllSeenBtn) {
         markAllSeenBtn.addEventListener('click', function() {
-            fetch('/iCensus-ent/public/sysadmin/logs/mark-all-as-seen', {
+            // FIX: Use basePath for the URL
+            fetch(`${basePath}/sysadmin/logs/mark-all-as-seen`, {
                 method: 'POST'
             })
             .then(response => response.json())

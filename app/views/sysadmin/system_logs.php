@@ -1,5 +1,5 @@
 <?php
-// /app/views/sysadmin/system_logs.php
+// app/views/sysadmin/system_logs.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,12 +7,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iCensus - System Logs</title>
-<?php $base_url = '/iCensus-ent/public'; ?>
-<link rel="icon" type="image/png" href="<?= $base_url ?>/assets/img/iCensusLogoOnly2.png">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/style.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/users.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/residents_table.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/system_logs.css"> 
+<?php 
+// FIX: Set to empty string for root domain
+$base_url = ''; 
+?>
+<link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
+<link rel="stylesheet" href="/public/assets/css/style.css">
+<link rel="stylesheet" href="/public/assets/css/users.css">
+<link rel="stylesheet" href="/public/assets/css/residents_table.css">
+<link rel="stylesheet" href="/public/assets/css/system_logs.css"> 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="<?= htmlspecialchars($theme) === 'dark' ? 'dark-mode' : 'light-mode'; ?>">
@@ -180,7 +183,11 @@
 
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
-<script src="<?= $base_url ?>/assets/js/system_logs.js"></script>
+<script>
+    // FIX: Define basePath relative to root
+    const basePath = "";
+</script>
+<script src="/public/assets/js/system_logs.js"></script>
 
 </body>
 </html>
