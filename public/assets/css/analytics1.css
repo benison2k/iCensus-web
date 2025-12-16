@@ -521,3 +521,26 @@ body.dark-mode .spinner {
 body.dark-mode .loading-text {
     color: #b0bec5;
 }
+
+/* ==================================================
+   FIX: Footer Transparency (ULTRA SPECIFIC)
+   ================================================== */
+/* Force white background on footer regardless of body class */
+html body footer.footer,
+html body .footer,
+.footer {
+    background-color: #ffffff !important; 
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 2000 !important;
+    width: 100% !important;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+}
+
+/* Force dark background when in dark mode */
+html body.dark-mode footer.footer,
+html body.dark-mode .footer {
+    background-color: #2C3E50 !important;
+    color: #ffffff !important;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
