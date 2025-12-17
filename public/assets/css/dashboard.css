@@ -103,7 +103,7 @@
     align-items: center;
     gap: 2rem;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 40px auto 0; /* UPDATED: Added top margin to fix header overlap */
     width: 95%;
 }
 
