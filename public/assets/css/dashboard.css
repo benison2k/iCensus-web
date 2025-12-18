@@ -382,16 +382,18 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    height: 100%; /* ADDED: Ensures the column fills the grid cell height */
 }
 
 .info-card {
     padding: 1.5rem;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
     display: flex;
-    align-items: flex-start;
+    align-items: center; /* CHANGED: Center content vertically */
     gap: 1rem;
     font-size: 0.9rem;
     line-height: 1.5;
+    flex: 1; /* ADDED: Makes the card grow to fill remaining space */
 }
 
 .info-icon {
