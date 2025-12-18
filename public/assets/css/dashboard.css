@@ -382,18 +382,18 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    height: 100%; /* ADDED: Ensures the column fills the grid cell height */
+    height: 100%; /* REQUIRED: Fills the grid height so children can stretch */
 }
 
 .info-card {
     padding: 1.5rem;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
     display: flex;
-    align-items: center; /* CHANGED: Center content vertically */
+    align-items: center; /* Center content vertically */
     gap: 1rem;
     font-size: 0.9rem;
     line-height: 1.5;
-    flex: 1; /* ADDED: Makes the card grow to fill remaining space */
+    flex: 1; /* REQUIRED: Stretches to fill remaining space */
 }
 
 .info-icon {
