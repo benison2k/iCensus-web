@@ -1,6 +1,8 @@
 <?php
-// Define the base URL for assets and links
-$base_url = '/iCensus-ent/public'; 
+// app/views/dashboard/encoder.php
+
+// Define the base URL. If your site is at the root, keep empty.
+$base_url = ''; 
 
 // NOTE: The greeting_name is now passed from the controller, cleaning up the view logic.
 $greetingName = $greeting_name ?? 'Encoder'; 
@@ -11,9 +13,10 @@ $greetingName = $greeting_name ?? 'Encoder';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iCensus - Encoder Dashboard</title>
-<link rel="icon" type="image/png" href="<?= $base_url ?>/assets/img/iCensusLogoOnly2.png">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/style.css">
-<link rel="stylesheet" href="<?= $base_url ?>/assets/css/dashboard.css">
+<link rel="icon" type="image/png" href="<?= $base_url ?>/public/assets/img/iCensusLogoOnly2.png">
+<link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/style.css">
+<link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/dashboard_common.css">
+<link rel="stylesheet" href="<?= $base_url ?>/public/assets/css/dashboard_encoder.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>

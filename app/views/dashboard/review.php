@@ -6,6 +6,7 @@
 <title>iCensus - Review Entries</title>
 <?php $base_url = '/iCensus-ent/public'; ?>
 <link rel="stylesheet" href="<?= $base_url ?>/assets/css/style.css">
+<link rel="stylesheet" href="<?= $base_url ?>/assets/css/dashboard_common.css">
 <link rel="stylesheet" href="<?= $base_url ?>/assets/css/users.css">
 <link rel="stylesheet" href="<?= $base_url ?>/assets/css/residents_table.css">
 <link rel="stylesheet" href="<?= $base_url ?>/assets/css/modal.css">

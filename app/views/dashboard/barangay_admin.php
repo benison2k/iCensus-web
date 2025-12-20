@@ -11,7 +11,8 @@ $base_url = '';
 <title>iCensus - Dashboard</title>
 <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
 <link rel="stylesheet" href="/public/assets/css/style.css">
-<link rel="stylesheet" href="/public/assets/css/dashboard.css">
+<link rel="stylesheet" href="/public/assets/css/dashboard_common.css">
+<link rel="stylesheet" href="/public/assets/css/dashboard_clerk.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>

@@ -1,0 +1,117 @@
+/* =========================
+   DASHBOARD COMMON STYLES
+========================= */
+.dashboard {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    transition: background 0.3s;
+    overflow: hidden; /* Prevents scrollbars during animation */
+}
+
+/* NEW: Style for full-width management pages */
+.dashboard-management {
+    align-items: flex-start; /* Align content to the top */
+    justify-content: center; /* Keep content centered horizontally */
+}
+
+/* Base Card Styles */
+.card {
+    position: relative;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background: #ffffff;
+    text-align: center;
+    min-height: 100px;
+    min-width: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s, color 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.6s ease forwards;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+/* Stagger effect */
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover interaction */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.clickable-card {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Notification Badge */
+.card .notification-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #d32f2f;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    animation: badge-pop 0.5s ease-out;
+    z-index: 10;
+}
+
+@keyframes badge-pop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* =========================
+   THEME COLORS (Base)
+========================= */
+body.light-mode {
+    background-color: #f4f6f8;
+    color: #333;
+}
+body.light-mode .dashboard {
+    background-color: #f4f6f8;
+}
+body.light-mode .card {
+    background: #ffffff;
+    color: #2C3E50;
+}
+
+body.dark-mode {
+    background-color: #1e1e2f;
+    color: #fff;
+}
+body.dark-mode .dashboard {
+    background-color: #1e1e2f;
+}
+body.dark-mode .card {
+    background: #27293d;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.05);
+}
