@@ -125,9 +125,37 @@ $greetingName = $greeting_name ?? 'Encoder';
                 </div>
             </a>
             
-            <div class="card info-card">
-                <span class="material-icons info-icon">lightbulb</span>
-                <p><strong>Tip:</strong> Ensure all required fields are filled before submitting to speed up approval.</p>
+            <div class="card info-card tip-carousel">
+                <div class="tip-header">
+                    <span class="material-icons info-icon">lightbulb</span>
+                    <span class="tip-title">Encoder Tips</span>
+                </div>
+                
+                <div class="tip-content-wrapper" id="tipCarousel">
+                    <div class="tip-slide active">
+                        <p>Ensure all <strong>required fields</strong> are filled before submitting to speed up approval.</p>
+                    </div>
+                    <div class="tip-slide">
+                        <p>Double-check the <strong>spelling of names</strong> to prevent creating duplicate records.</p>
+                    </div>
+                    <div class="tip-slide">
+                        <p>Use the <strong>search filter</strong> to confirm a resident doesn't already exist before adding.</p>
+                    </div>
+                    <div class="tip-slide">
+                        <p>Verify <strong>birth dates</strong> carefully to ensure accurate age demographics.</p>
+                    </div>
+                    <div class="tip-slide">
+                        <p>Review your <strong>Pending</strong> tab regularly to check for any returned entries.</p>
+                    </div>
+                </div>
+
+                <div class="tip-indicators">
+                    <span class="dot active" onclick="setTip(0)"></span>
+                    <span class="dot" onclick="setTip(1)"></span>
+                    <span class="dot" onclick="setTip(2)"></span>
+                    <span class="dot" onclick="setTip(3)"></span>
+                    <span class="dot" onclick="setTip(4)"></span>
+                </div>
             </div>
         </div>
 
@@ -136,6 +164,48 @@ $greetingName = $greeting_name ?? 'Encoder';
 </main>
 
 <?php include __DIR__ . '/../components/footer.php'; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentTip = 0;
+        const slides = document.querySelectorAll('.tip-slide');
+        const dots = document.querySelectorAll('.tip-indicators .dot');
+        const totalTips = slides.length;
+        let tipInterval;
+
+        function showTip(index) {
+            // Remove active class from all
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            // Add active class to current
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentTip = index;
+        }
+
+        function nextTip() {
+            let next = (currentTip + 1) % totalTips;
+            showTip(next);
+        }
+
+        // Global function for dot clicks
+        window.setTip = function(index) {
+            clearInterval(tipInterval); // Pause auto-play on interaction
+            showTip(index);
+            startCarousel(); // Restart auto-play
+        };
+
+        function startCarousel() {
+            tipInterval = setInterval(nextTip, 5000); // Change every 5 seconds
+        }
+
+        // Initialize if slides exist
+        if(totalTips > 0) {
+            startCarousel();
+        }
+    });
+</script>
 
 </body>
 </html>
