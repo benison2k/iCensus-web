@@ -243,10 +243,13 @@
     height: 100%;
 }
 
+/* Original info-card styles replaced/overridden by tip-carousel below, 
+   but kept base properties if needed by other elements. 
+   The specific carousel styles are at the bottom. */
 .info-card {
     padding: 1.5rem;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    display: flex; align-items: center; gap: 1rem;
+    /* display: flex; align-items: center; gap: 1rem; */ /* Overridden for carousel */
     font-size: 0.9rem; line-height: 1.5; flex: 1;
 }
 
@@ -288,4 +291,106 @@ body.dark-mode .activity-item:hover { background-color: rgba(255,255,255,0.08); 
     .stat-number {
         font-size: 1.8rem;
     }
+}
+
+/* =========================
+   TIP CAROUSEL STYLES
+========================= */
+
+.info-card.tip-carousel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px; /* Ensure consistent height */
+    padding: 1.5rem;
+}
+
+.tip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.tip-title {
+    font-weight: 700;
+    color: #444;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body.dark-mode .tip-title {
+    color: #ddd;
+}
+
+.tip-content-wrapper {
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.tip-slide {
+    display: none;
+    width: 100%;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.tip-slide.active {
+    display: block;
+}
+
+.tip-slide p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+body.dark-mode .tip-slide p {
+    color: #ccc;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Indicators (Dots) */
+.tip-indicators {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    width: 100%;
+    justify-content: center;
+    padding-top: 1rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: rgba(0,0,0,0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background-color: #fbc02d; /* Match the lightbulb icon color */
+    transform: scale(1.2);
+}
+
+body.dark-mode .dot {
+    background-color: rgba(255,255,255,0.2);
+}
+
+body.dark-mode .dot.active {
+    background-color: #fbc02d;
 }
