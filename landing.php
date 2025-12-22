@@ -18,14 +18,17 @@
     <header class="header" id="header">
         <div class="container header-container">
             <img src="/public/assets/img/iCensusLogo.png" alt="iCensus Logo" class="logo">
-            <div>
-                <a href="/" class="btn-login btn-icon" title="Home">
-                    <span class="material-icons">home</span>
+            <nav class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="/login" class="btn-login">
+                    <span class="material-icons" style="font-size: 18px;">login</span> Member Login
                 </a>
-                <a href="/login" class="btn-login btn-icon" title="Member Login">
-                    <span class="material-icons">account_circle</span>
-                </a>
-            </div>
+            </nav>
+            <button class="mobile-toggle" id="mobileToggle">
+                <span class="material-icons">menu</span>
+            </button>
         </div>
     </header>
 
@@ -36,7 +39,7 @@
                     <div class="hero-text-content">
                         <h1 class="hero-title">Empowering Your Barangay with Digital Census Management</h1>
                         <p class="hero-subtitle">
-                            Welcome to iCensus. Streamline resident profiling, generate instant reports, and build a better-informed community.
+                            Welcome to iCensus. Streamline resident profiling, generate instant reports, and build a better-informed community with our secure digital platform.
                         </p>
                         <a href="/login" class="btn-cta">Access the Portal</a>
                     </div>
@@ -65,7 +68,18 @@
             </div>
         </section>
 
-        <section class="features fade-in-section">
+        <section class="mission-section fade-in-section">
+            <div class="container">
+                <div class="mission-content">
+                    <h2 class="section-title">Our Mission</h2>
+                    <p class="mission-text">
+                        To empower local government units with technology that fosters better-informed, responsive, and well-organized communities. By digitizing the census process, we aim to provide barangay officials with the accurate data needed for effective resource allocation and public service.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features fade-in-section">
             <div class="container">
                 <h2 class="section-title">Everything You Need in One Platform</h2>
                 <div class="features-grid">
@@ -88,7 +102,7 @@
             </div>
         </section>
 
-        <section class="how-it-works fade-in-section">
+        <section id="how-it-works" class="how-it-works fade-in-section">
             <div class="container">
                 <h2 class="section-title">A Simple, Streamlined Process</h2>
                 <div class="process-wrapper">
@@ -137,6 +151,43 @@
             </div>
         </section>
 
+        <section id="faq" class="faq-section fade-in-section">
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <details class="faq-item">
+                        <summary>
+                            <span class="question-text">Is the resident data secure?</span>
+                            <span class="material-icons toggle-icon">expand_more</span>
+                        </summary>
+                        <div class="answer">
+                            <p>Yes. The system uses encrypted passwords and strictly enforces role-based access control. Only authorized Encoders and Admins can access specific data sets.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>
+                            <span class="question-text">Can I access this on mobile?</span>
+                            <span class="material-icons toggle-icon">expand_more</span>
+                        </summary>
+                        <div class="answer">
+                            <p>Absolutely. iCensus is built with a responsive design that adapts to desktops, tablets, and mobile phones for data entry on the go.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>
+                            <span class="question-text">Who do I contact for support?</span>
+                            <span class="material-icons toggle-icon">expand_more</span>
+                        </summary>
+                        <div class="answer">
+                            <p>Please contact your System Administrator for account resets or technical issues. Once logged in, you can use the support form to reach the admin directly.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
         <section class="cta-section">
             <div class="container">
                 <h2>Ready to Get Started?</h2>
@@ -147,7 +198,26 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; <?= date("Y") ?> iCensus System. All Rights Reserved.</p>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <img src="/public/assets/img/iCensusLogoOnly2.png" alt="iCensus" class="footer-logo">
+                <p>Empowering barangays with digital census solutions.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="#header">Home</a>
+                <a href="#features">Features</a>
+                <a href="#faq">FAQ</a>
+                <a href="/login">Login</a>
+            </div>
+            <div class="footer-contact">
+                 <h4>Contact</h4>
+                 <p>Support is available for registered barangay officials.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <?= date("Y") ?> iCensus System. All Rights Reserved.</p>
+        </div>
     </footer>
 
     <script>
@@ -159,6 +229,16 @@
                 header.classList.remove('scrolled');
             }
         });
+
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        if(mobileToggle){
+            mobileToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
 
         // Particle animation script
         const canvas = document.getElementById('particleCanvas');
