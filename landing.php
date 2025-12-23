@@ -130,22 +130,46 @@
         <section class="role-section fade-in-section">
             <div class="container">
                  <h2 class="section-title">Designed For Your Role</h2>
+                 
                  <div class="role-row">
                      <div class="role-text">
                          <h3>For Barangay Admins</h3>
                          <p>Oversee all census operations with a comprehensive dashboard. Manage user accounts for encoders, view system-wide analytics for better community planning, and ensure the integrity and security of all resident data.</p>
                      </div>
                      <div class="role-img-container">
-                        <span class="material-icons role-icon">supervisor_account</span>
+                        <div class="css-graphic admin-graphic">
+                            <div class="admin-screen">
+                                <div class="screen-header"></div>
+                                <div class="screen-body">
+                                    <div class="screen-sidebar"></div>
+                                    <div class="screen-content">
+                                        <div class="graph-bar bar-1"></div>
+                                        <div class="graph-bar bar-2"></div>
+                                        <div class="graph-bar bar-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="admin-base"></div>
+                        </div>
                      </div>
                  </div>
+
                  <div class="role-row reverse">
                       <div class="role-text">
                          <h3>For Data Encoders</h3>
                          <p>Focus on what you do best: accurate and efficient data entry. With a clean, straightforward interface, you can add and update resident profiles quickly, minimizing errors and maximizing productivity.</p>
                      </div>
                      <div class="role-img-container">
-                        <span class="material-icons role-icon">edit</span>
+                        <div class="css-graphic encoder-graphic">
+                            <div class="form-paper">
+                                <div class="form-header"></div>
+                                <div class="form-line full"></div>
+                                <div class="form-line full"></div>
+                                <div class="form-line short"></div>
+                                <div class="selection-box"></div>
+                            </div>
+                            <div class="floating-pen"></div>
+                        </div>
                      </div>
                  </div>
             </div>
