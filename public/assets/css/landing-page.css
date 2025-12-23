@@ -501,3 +501,209 @@ main > section.hero {
 .back-to-top .material-icons {
     font-size: 24px;
 }
+
+/* =================================
+   Custom CSS Graphics (Roles)
+==================================== */
+
+/* Container Reset */
+.role-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px; /* Ensure space for the graphic */
+    overflow: visible;
+}
+
+.css-graphic {
+    position: relative;
+    width: 180px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Admin Graphic (Dashboard Monitor) --- */
+.admin-graphic {
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.admin-screen {
+    width: 160px;
+    height: 100px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.admin-base {
+    width: 60px;
+    height: 15px;
+    background: linear-gradient(to right, #ccc, #e0e0e0);
+    margin-top: -2px;
+    clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
+    position: relative;
+    z-index: 1;
+}
+
+/* Screen Internals */
+.screen-header {
+    height: 15px;
+    background: var(--bg-light);
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+}
+.screen-header::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #ff5f57;
+    box-shadow: 10px 0 0 #ffbd2e, 20px 0 0 #28c940;
+}
+
+.screen-body {
+    display: flex;
+    height: calc(100% - 15px);
+}
+
+.screen-sidebar {
+    width: 35px;
+    background: var(--accent-light);
+    height: 100%;
+}
+
+.screen-content {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+/* Animated Bars */
+.graph-bar {
+    width: 20px;
+    background: linear-gradient(180deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease;
+}
+
+.bar-1 { height: 40%; animation: growBar1 2s infinite alternate; }
+.bar-2 { height: 70%; animation: growBar2 2.5s infinite alternate; }
+.bar-3 { height: 50%; animation: growBar3 2.2s infinite alternate; }
+
+@keyframes growBar1 { 0% { height: 40%; } 100% { height: 55%; } }
+@keyframes growBar2 { 0% { height: 70%; } 100% { height: 85%; } }
+@keyframes growBar3 { 0% { height: 50%; } 100% { height: 65%; } }
+
+.admin-graphic:hover .admin-screen {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(13, 110, 253, 0.15);
+}
+
+
+/* --- Encoder Graphic (Form & Pen) --- */
+
+.form-paper {
+    width: 120px;
+    height: 150px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    position: relative;
+    padding: 15px;
+    transform: rotate(-3deg);
+    transition: transform 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.form-header {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    margin-bottom: 15px;
+}
+
+.form-line {
+    height: 6px;
+    background: #f0f0f0;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.form-line.full { width: 100%; }
+.form-line.short { width: 60%; }
+
+.selection-box {
+    width: 100%;
+    height: 25px;
+    border: 2px solid var(--gradient-start);
+    border-radius: 4px;
+    margin-top: 15px;
+    background: rgba(13, 110, 253, 0.05);
+    opacity: 0;
+    animation: fadeInSelection 2s infinite;
+}
+
+/* Floating Pen */
+.floating-pen {
+    width: 12px;
+    height: 60px;
+    background: var(--text-dark);
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+    transform: rotate(-25deg);
+    border-radius: 2px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+    z-index: 5;
+    animation: floatPen 3s ease-in-out infinite;
+}
+
+/* Pen Tip */
+.floating-pen::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--text-dark);
+}
+/* Pen Cap */
+.floating-pen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: var(--gradient-start);
+    border-radius: 2px 2px 0 0;
+}
+
+@keyframes floatPen {
+    0%, 100% { transform: rotate(-25deg) translateY(0) translateX(0); }
+    50% { transform: rotate(-20deg) translateY(-10px) translateX(5px); }
+}
+
+@keyframes fadeInSelection {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.encoder-graphic:hover .form-paper {
+    transform: rotate(0deg) scale(1.02);
+}
