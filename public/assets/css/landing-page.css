@@ -310,8 +310,9 @@ main > section.hero {
     display: inline-flex; justify-content: center; align-items: center;
     width: 80px; height: 80px; border-radius: 50%;
     background-color: var(--accent-light); margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
-.feature-icon-wrapper .material-icons { font-size: 2.5rem; color: var(--gradient-start); }
 .feature-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem; }
 .feature-description { font-size: 0.95rem; color: #555; }
 
@@ -324,8 +325,9 @@ main > section.hero {
 .step-icon {
     width: 90px; height: 90px; border-radius: 50%; background-color: var(--accent-light);
     display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
-.step-icon .material-icons { font-size: 2.8rem; color: var(--gradient-start); }
 .step-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; }
 .step-arrow { font-size: 2rem; color: #ccc; margin-top: 3rem; }
 
@@ -341,6 +343,13 @@ main > section.hero {
     background-color: var(--bg-white); border-radius: 12px;
     padding: 3rem; text-align: center;
     box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+    
+    /* Ensure flex container handles graphic correctly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    overflow: visible;
 }
 .role-icon { font-size: 6rem; color: var(--gradient-start); }
 .role-row.reverse { flex-direction: row-reverse; }
@@ -707,3 +716,101 @@ main > section.hero {
 .encoder-graphic:hover .form-paper {
     transform: rotate(0deg) scale(1.02);
 }
+
+/* =================================
+   Custom CSS Graphics (Features & Steps)
+==================================== */
+
+/* Common container for all CSS icons */
+.css-icon {
+    width: 50px; 
+    height: 50px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    position: relative;
+}
+
+/* 1. Database Stack Icon (Features) */
+.icon-database { flex-direction: column; gap: 4px; }
+.db-layer {
+    width: 36px; height: 10px; border-radius: 5px;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+    opacity: 0.8; transition: transform 0.3s;
+}
+.feature-card:hover .db-layer.top { transform: translateY(-3px); }
+.feature-card:hover .db-layer.bot { transform: translateY(3px); }
+
+/* 2. Analytics Pie Icon (Features) */
+.icon-analytics-pie .pie-chart {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: conic-gradient(var(--gradient-start) 75%, transparent 0);
+    transform: rotate(-30deg);
+}
+.icon-analytics-pie .pie-slice {
+    position: absolute; width: 18px; height: 18px;
+    background: var(--gradient-end); border-radius: 50%;
+    top: 5px; right: 2px; opacity: 0.8;
+    animation: popSlice 2s infinite alternate;
+}
+@keyframes popSlice { from { transform: translate(0,0); } to { transform: translate(5px, -5px); } }
+
+/* 3. Shield Icon (Features) */
+.icon-shield .shield-body {
+    width: 36px; height: 42px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    display: flex; justify-content: center; align-items: center;
+}
+.icon-shield .shield-inner {
+    width: 15px; height: 10px; border-left: 3px solid white; border-bottom: 3px solid white;
+    transform: rotate(-45deg) translate(2px, -2px);
+}
+
+/* 4. Lock Icon (How It Works) */
+.icon-lock { flex-direction: column; justify-content: flex-end; padding-bottom: 5px; }
+.lock-shackle {
+    width: 18px; height: 16px; border: 3px solid var(--gradient-start);
+    border-bottom: none; border-radius: 10px 10px 0 0;
+    transition: transform 0.3s; transform-origin: right bottom;
+}
+.process-step:hover .lock-shackle { transform: rotate(-20deg); }
+.lock-body {
+    width: 30px; height: 24px; background: var(--gradient-start);
+    border-radius: 4px; display: flex; justify-content: center; align-items: center;
+}
+.lock-body .keyhole {
+    width: 4px; height: 8px; background: white; border-radius: 2px;
+}
+
+/* 5. File Edit Icon (How It Works) */
+.icon-files { position: relative; }
+.file-doc {
+    width: 30px; height: 40px; background: white; 
+    border: 2px solid var(--gradient-start);
+    border-radius: 4px; padding: 4px; 
+    display: flex; flex-direction: column; gap: 3px;
+}
+.file-lines {
+    width: 100%; height: 2px; background: #ddd; box-shadow: 0 4px 0 #ddd, 0 8px 0 #ddd;
+}
+.file-pencil {
+    position: absolute; right: 0; bottom: 5px;
+    width: 6px; height: 20px; background: var(--text-dark);
+    transform: rotate(-30deg); border-radius: 2px;
+    animation: write 1s infinite alternate;
+}
+@keyframes write { from { transform: rotate(-30deg) translateY(0); } to { transform: rotate(-30deg) translateY(-3px); } }
+
+/* 6. Report Icon (How It Works) */
+.icon-report .report-doc {
+    width: 34px; height: 44px; background: white;
+    border: 2px solid var(--gradient-start); border-radius: 4px;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px;
+}
+.report-graph { display: flex; align-items: flex-end; gap: 3px; }
+.r-bar { width: 4px; background: var(--gradient-end); border-radius: 2px 2px 0 0; }
+.r-bar.b1 { height: 10px; animation: bGrow 1.5s infinite; }
+.r-bar.b2 { height: 18px; animation: bGrow 1.5s 0.2s infinite; }
+.r-bar.b3 { height: 14px; animation: bGrow 1.5s 0.4s infinite; }
+@keyframes bGrow { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.3); transform-origin: bottom; } }

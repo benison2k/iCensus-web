@@ -84,17 +84,34 @@
                 <h2 class="section-title">Everything You Need in One Platform</h2>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon-wrapper"><span class="material-icons">groups</span></div>
+                        <div class="feature-icon-wrapper">
+                             <div class="css-icon icon-database">
+                                <div class="db-layer top"></div>
+                                <div class="db-layer mid"></div>
+                                <div class="db-layer bot"></div>
+                            </div>
+                        </div>
                         <h3 class="feature-title">Centralized Resident Data</h3>
                         <p class="feature-description">Securely manage, view, and update all resident information in one organized and accessible database.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon-wrapper"><span class="material-icons">analytics</span></div>
+                        <div class="feature-icon-wrapper">
+                            <div class="css-icon icon-analytics-pie">
+                                <div class="pie-chart"></div>
+                                <div class="pie-slice"></div>
+                            </div>
+                        </div>
                         <h3 class="feature-title">Insightful Analytics</h3>
                         <p class="feature-description">Generate real-time demographic reports and statistics with a powerful analytics dashboard.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon-wrapper"><span class="material-icons">admin_panel_settings</span></div>
+                        <div class="feature-icon-wrapper">
+                            <div class="css-icon icon-shield">
+                                <div class="shield-body">
+                                    <div class="shield-inner"></div>
+                                </div>
+                            </div>
+                        </div>
                         <h3 class="feature-title">Role-Based Access</h3>
                         <p class="feature-description">Ensure data security with distinct permission levels for Admins and Encoders.</p>
                     </div>
@@ -107,19 +124,43 @@
                 <h2 class="section-title">A Simple, Streamlined Process</h2>
                 <div class="process-wrapper">
                     <div class="process-step">
-                        <div class="step-icon"><span class="material-icons">lock_open</span></div>
+                        <div class="step-icon">
+                            <div class="css-icon icon-lock">
+                                <div class="lock-shackle"></div>
+                                <div class="lock-body">
+                                    <div class="keyhole"></div>
+                                </div>
+                            </div>
+                        </div>
                         <h3 class="step-title">1. Secure Login</h3>
                         <p>Access the system using your officially provided credentials with role-based permissions.</p>
                     </div>
                     <div class="step-arrow">&rarr;</div>
                     <div class="process-step">
-                        <div class="step-icon"><span class="material-icons">edit_document</span></div>
+                        <div class="step-icon">
+                            <div class="css-icon icon-files">
+                                <div class="file-doc">
+                                    <div class="file-lines"></div>
+                                </div>
+                                <div class="file-pencil"></div>
+                            </div>
+                        </div>
                         <h3 class="step-title">2. Manage Data</h3>
                         <p>Easily add new residents, update existing information, and search the entire database in seconds.</p>
                     </div>
                     <div class="step-arrow">&rarr;</div>
                     <div class="process-step">
-                        <div class="step-icon"><span class="material-icons">assessment</span></div>
+                        <div class="step-icon">
+                             <div class="css-icon icon-report">
+                                <div class="report-doc">
+                                    <div class="report-graph">
+                                        <div class="r-bar b1"></div>
+                                        <div class="r-bar b2"></div>
+                                        <div class="r-bar b3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <h3 class="step-title">3. Generate Insights</h3>
                         <p>Instantly create official reports and visualize demographic data through the analytics dashboard.</p>
                     </div>
