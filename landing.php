@@ -220,15 +220,39 @@
         </div>
     </footer>
 
+    <button id="backToTop" class="back-to-top" aria-label="Back to Top">
+        <span class="material-icons">arrow_upward</span>
+    </button>
+
     <script>
         const header = document.getElementById('header');
+        const backToTopBtn = document.getElementById('backToTop');
+
         window.addEventListener('scroll', () => {
+            // Header Scroll Logic
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
+
+            // Back to Top Button Logic
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
         });
+
+        // Click event to scroll smoothly to top
+        if(backToTopBtn) {
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
 
         // Mobile Menu Toggle
         const mobileToggle = document.getElementById('mobileToggle');
