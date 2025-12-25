@@ -21,6 +21,7 @@
             <nav class="nav-menu">
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#security" class="nav-link">Security</a>
                 <a href="#faq" class="nav-link">FAQ</a>
                 <a href="/login" class="btn-login">
                     <span class="material-icons" style="font-size: 18px;">login</span> Member Login
@@ -75,6 +76,28 @@
                     <p class="mission-text">
                         To empower local government units with technology that fosters better-informed, responsive, and well-organized communities. By digitizing the census process, we aim to provide barangay officials with the accurate data needed for effective resource allocation and public service.
                     </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section fade-in-section">
+            <div class="container">
+                <div class="impact-grid">
+                    <div class="impact-item">
+                        <span class="material-icons impact-icon">eco</span>
+                        <span class="impact-label">100% Paperless</span>
+                        <p>Reduce waste and save physical storage space.</p>
+                    </div>
+                    <div class="impact-item">
+                        <span class="material-icons impact-icon">bolt</span>
+                        <span class="impact-label">Instant Retrieval</span>
+                        <p>Search resident records in milliseconds.</p>
+                    </div>
+                    <div class="impact-item">
+                        <span class="material-icons impact-icon">cloud_done</span>
+                        <span class="impact-label">Always On</span>
+                        <p>Access data securely from anywhere, anytime.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -216,6 +239,53 @@
             </div>
         </section>
 
+        <section id="security" class="security-section fade-in-section">
+            <div class="container">
+                <div class="security-grid">
+                    <div class="security-content">
+                        <h2 class="section-title" style="text-align: left; margin-bottom: 1.5rem;">Uncompromised Data Security</h2>
+                        <p class="security-text">
+                            We understand the importance of data privacy in census management. iCensus incorporates advanced security measures to protect your barangay's information.
+                        </p>
+                        <ul class="security-list">
+                            <li>
+                                <span class="material-icons sec-icon">security</span>
+                                <div class="sec-detail">
+                                    <strong>Two-Factor Authentication (2FA)</strong>
+                                    <span>Add an extra layer of protection to user accounts to prevent unauthorized access.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="material-icons sec-icon">history</span>
+                                <div class="sec-detail">
+                                    <strong>Comprehensive Audit Logs</strong>
+                                    <span>Every action is recorded. Admins can track data changes and user activities transparently.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="material-icons sec-icon">storage</span>
+                                <div class="sec-detail">
+                                    <strong>Automated Database Tools</strong>
+                                    <span>Built-in tools for data integrity, ensuring records are safe and recoverable.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="security-visual">
+                         <div class="css-graphic security-graphic">
+                            <div class="vault-body">
+                                <div class="vault-dial">
+                                    <div class="dial-center"></div>
+                                    <div class="dial-handle"></div>
+                                </div>
+                                <div class="vault-led"></div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="faq" class="faq-section fade-in-section">
             <div class="container">
                 <h2 class="section-title">Frequently Asked Questions</h2>
@@ -272,6 +342,7 @@
                 <h4>Quick Links</h4>
                 <a href="#header">Home</a>
                 <a href="#features">Features</a>
+                <a href="#security">Security</a>
                 <a href="#faq">FAQ</a>
                 <a href="/login">Login</a>
             </div>
