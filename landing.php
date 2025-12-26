@@ -10,6 +10,87 @@
     <link rel="stylesheet" href="/public/assets/css/landing-page.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* Lightbox Modal Styles */
+        .image-modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 2000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: auto;
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 4px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease forwards;
+            object-fit: contain;
+        }
+
+        #modalCaption {
+            margin-top: 15px;
+            color: #ccc;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.9); opacity: 0;} 
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Update Carousel Images to indicate clickability */
+        .carousel-slide img {
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-slide img:hover {
+            transform: scale(1.02);
+        }
+    </style>
 </head>
 <body>
 
@@ -48,13 +129,13 @@
                         <div class="carousel-wrapper">
                             <div class="carousel-container">
                                 <div class="carousel-slides">
-                                    <div class="carousel-slide" data-caption="Dashboard">
+                                    <div class="carousel-slide" data-caption="Dashboard Overview">
                                         <img src="/public/assets/img/dashboard.png" alt="Dashboard View">
                                     </div>
                                     <div class="carousel-slide" data-caption="Residents Management">
                                         <img src="/public/assets/img/residents.png" alt="Residents Management View">
                                     </div>
-                                    <div class="carousel-slide" data-caption="Data Analytics">
+                                    <div class="carousel-slide" data-caption="Data Analytics & Reports">
                                         <img src="/public/assets/img/analytics.png" alt="Analytics View">
                                     </div>
                                 </div>
@@ -360,6 +441,12 @@
         <span class="material-icons">arrow_upward</span>
     </button>
 
+    <div id="lightboxModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="expandedImage" alt="Expanded View">
+        <div id="modalCaption"></div>
+    </div>
+
     <script>
         const header = document.getElementById('header');
         const backToTopBtn = document.getElementById('backToTop');
@@ -483,7 +570,9 @@
                 dotsContainer.children[currentSlide].classList.add('active');
 
                 // Update external caption
-                captionEl.textContent = slides[currentSlide].dataset.caption;
+                if (captionEl) {
+                    captionEl.textContent = slides[currentSlide].dataset.caption;
+                }
                 
                 clearInterval(slideInterval);
                 slideInterval = setInterval(() => showSlide(currentSlide + 1), 5000);
@@ -507,6 +596,61 @@
         initParticles();
         animateParticles();
         initCarousel();
+
+        /* =================================
+           Lightbox Logic
+        ==================================== */
+        const modal = document.getElementById("lightboxModal");
+        const modalImg = document.getElementById("expandedImage");
+        const captionText = document.getElementById("modalCaption");
+        const closeBtn = document.querySelector(".close-modal");
+        
+        // Select all images inside carousel slides
+        const carouselImages = document.querySelectorAll('.carousel-slide img');
+
+        if (carouselImages.length > 0) {
+            carouselImages.forEach(img => {
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent clicking through to other elements
+                    modal.style.display = "flex"; // Show modal using flex to center content
+                    modalImg.src = this.src; // Set modal image source
+                    
+                    // Optional: Set caption from the parent slide's data attribute
+                    const slideParent = this.closest('.carousel-slide');
+                    if(slideParent && slideParent.dataset.caption) {
+                        captionText.textContent = slideParent.dataset.caption;
+                    } else {
+                        captionText.textContent = "";
+                    }
+                });
+            });
+        }
+
+        // Close Modal Function
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Event Listeners for Closing
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        // Close if user clicks anywhere outside the image (the background)
+        if (modal) {
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && modal.style.display === "flex") {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
