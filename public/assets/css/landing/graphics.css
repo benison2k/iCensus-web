@@ -1,0 +1,214 @@
+/* =================================
+   Custom CSS Graphics & Icons
+   (Pure CSS drawings for Features, Roles, Security)
+==================================== */
+
+/* Container & Base Graphics */
+.role-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    overflow: visible;
+}
+
+.css-graphic, .css-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.css-graphic { width: 180px; height: 150px; }
+.css-icon { width: 50px; height: 50px; }
+
+/* --- 1. Admin Graphic (Dashboard Monitor) --- */
+.admin-graphic { flex-direction: column; justify-content: flex-end; }
+.admin-screen {
+    width: 160px; height: 100px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden; position: relative; z-index: 2;
+    transition: transform 0.3s ease;
+}
+.admin-base {
+    width: 60px; height: 15px;
+    background: linear-gradient(to right, #ccc, #e0e0e0);
+    margin-top: -2px;
+    clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
+    position: relative; z-index: 1;
+}
+.screen-header {
+    height: 15px; background: var(--bg-light);
+    border-bottom: 1px solid #eee; display: flex; align-items: center; padding-left: 8px;
+}
+.screen-header::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: #ff5f57; box-shadow: 10px 0 0 #ffbd2e, 20px 0 0 #28c940;
+}
+.screen-body { display: flex; height: calc(100% - 15px); }
+.screen-sidebar { width: 35px; background: var(--accent-light); height: 100%; }
+.screen-content {
+    flex: 1; padding: 10px; display: flex; align-items: flex-end; justify-content: space-around; gap: 5px;
+}
+.graph-bar {
+    width: 20px; background: linear-gradient(180deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 3px 3px 0 0; transition: height 0.5s ease;
+}
+.bar-1 { height: 40%; animation: growBar1 2s infinite alternate; }
+.bar-2 { height: 70%; animation: growBar2 2.5s infinite alternate; }
+.bar-3 { height: 50%; animation: growBar3 2.2s infinite alternate; }
+@keyframes growBar1 { 0% { height: 40%; } 100% { height: 55%; } }
+@keyframes growBar2 { 0% { height: 70%; } 100% { height: 85%; } }
+@keyframes growBar3 { 0% { height: 50%; } 100% { height: 65%; } }
+.admin-graphic:hover .admin-screen { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(13, 110, 253, 0.15); }
+
+/* --- 2. Encoder Graphic (Form & Pen) --- */
+.form-paper {
+    width: 120px; height: 150px; background: #fff;
+    border-radius: 6px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    position: relative; padding: 15px; transform: rotate(-3deg);
+    transition: transform 0.3s ease; border: 1px solid #f0f0f0;
+}
+.form-header { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-light); margin-bottom: 15px; }
+.form-line { height: 6px; background: #f0f0f0; margin-bottom: 10px; border-radius: 3px; }
+.form-line.full { width: 100%; } .form-line.short { width: 60%; }
+.selection-box {
+    width: 100%; height: 25px; border: 2px solid var(--gradient-start);
+    border-radius: 4px; margin-top: 15px; background: rgba(13, 110, 253, 0.05);
+    opacity: 0; animation: fadeInSelection 2s infinite;
+}
+.floating-pen {
+    width: 12px; height: 60px; background: var(--text-dark);
+    position: absolute; right: 20px; bottom: 40px;
+    transform: rotate(-25deg); border-radius: 2px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.2); z-index: 5;
+    animation: floatPen 3s ease-in-out infinite;
+}
+.floating-pen::after {
+    content: ''; position: absolute; bottom: -8px; left: 0; width: 0; height: 0;
+    border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--text-dark);
+}
+.floating-pen::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px;
+    background: var(--gradient-start); border-radius: 2px 2px 0 0;
+}
+@keyframes floatPen {
+    0%, 100% { transform: rotate(-25deg) translateY(0) translateX(0); }
+    50% { transform: rotate(-20deg) translateY(-10px) translateX(5px); }
+}
+@keyframes fadeInSelection { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+.encoder-graphic:hover .form-paper { transform: rotate(0deg) scale(1.02); }
+
+/* --- 3. Feature Icons (Database, Pie, Shield) --- */
+.icon-database { flex-direction: column; gap: 4px; }
+.db-layer {
+    width: 36px; height: 10px; border-radius: 5px;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+    opacity: 0.8; transition: transform 0.3s;
+}
+.feature-card:hover .db-layer.top { transform: translateY(-3px); }
+.feature-card:hover .db-layer.bot { transform: translateY(3px); }
+
+.icon-analytics-pie .pie-chart {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: conic-gradient(var(--gradient-start) 75%, transparent 0);
+    transform: rotate(-30deg);
+}
+.icon-analytics-pie .pie-slice {
+    position: absolute; width: 18px; height: 18px;
+    background: var(--gradient-end); border-radius: 50%;
+    top: 5px; right: 2px; opacity: 0.8; animation: popSlice 2s infinite alternate;
+}
+@keyframes popSlice { from { transform: translate(0,0); } to { transform: translate(5px, -5px); } }
+
+.icon-shield .shield-body {
+    width: 36px; height: 42px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    display: flex; justify-content: center; align-items: center;
+}
+.icon-shield .shield-inner {
+    width: 15px; height: 10px; border-left: 3px solid white; border-bottom: 3px solid white;
+    transform: rotate(-45deg) translate(2px, -2px);
+}
+
+/* --- 4. Process Icons (Lock, Files, Report) --- */
+.icon-lock { flex-direction: column; justify-content: flex-end; padding-bottom: 5px; }
+.lock-shackle {
+    width: 18px; height: 16px; border: 3px solid var(--gradient-start);
+    border-bottom: none; border-radius: 10px 10px 0 0;
+    transition: transform 0.3s; transform-origin: right bottom;
+}
+.process-step:hover .lock-shackle { transform: rotate(-20deg); }
+.lock-body {
+    width: 30px; height: 24px; background: var(--gradient-start);
+    border-radius: 4px; display: flex; justify-content: center; align-items: center;
+}
+.lock-body .keyhole { width: 4px; height: 8px; background: white; border-radius: 2px; }
+
+.icon-files { position: relative; }
+.file-doc {
+    width: 30px; height: 40px; background: white; 
+    border: 2px solid var(--gradient-start); border-radius: 4px; padding: 4px; 
+    display: flex; flex-direction: column; gap: 3px;
+}
+.file-lines { width: 100%; height: 2px; background: #ddd; box-shadow: 0 4px 0 #ddd, 0 8px 0 #ddd; }
+.file-pencil {
+    position: absolute; right: 0; bottom: 5px;
+    width: 6px; height: 20px; background: var(--text-dark);
+    transform: rotate(-30deg); border-radius: 2px; animation: write 1s infinite alternate;
+}
+@keyframes write { from { transform: rotate(-30deg) translateY(0); } to { transform: rotate(-30deg) translateY(-3px); } }
+
+.icon-report .report-doc {
+    width: 34px; height: 44px; background: white;
+    border: 2px solid var(--gradient-start); border-radius: 4px;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px;
+}
+.report-graph { display: flex; align-items: flex-end; gap: 3px; }
+.r-bar { width: 4px; background: var(--gradient-end); border-radius: 2px 2px 0 0; }
+.r-bar.b1 { height: 10px; animation: bGrow 1.5s infinite; }
+.r-bar.b2 { height: 18px; animation: bGrow 1.5s 0.2s infinite; }
+.r-bar.b3 { height: 14px; animation: bGrow 1.5s 0.4s infinite; }
+@keyframes bGrow { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.3); transform-origin: bottom; } }
+
+/* --- 5. Security Graphic (Vault) --- */
+.security-graphic { width: 200px; height: 200px; }
+.vault-body {
+    width: 160px; height: 160px; background: #2C3E50;
+    border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    position: relative; display: flex; justify-content: center; align-items: center;
+    border: 4px solid #34495e;
+}
+.vault-dial {
+    width: 90px; height: 90px; background: #e0e0e0;
+    border-radius: 50%; border: 8px solid #95a5a6;
+    position: relative; display: flex; justify-content: center; align-items: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+.dial-center { width: 20px; height: 20px; background: #333; border-radius: 50%; z-index: 2; }
+.dial-handle {
+    position: absolute; top: 10px; left: 50%; width: 8px; height: 35px;
+    background: #7f8c8d; transform-origin: bottom center;
+    transform: translateX(-50%) rotate(0deg); animation: spinVault 4s ease-in-out infinite;
+}
+.vault-led {
+    position: absolute; top: 15px; right: 15px; width: 8px; height: 8px;
+    background: #e74c3c; border-radius: 50%; box-shadow: 0 0 5px #e74c3c;
+    animation: blinkLed 4s infinite;
+}
+@keyframes spinVault {
+    0% { transform: translateX(-50%) rotate(0deg); }
+    20% { transform: translateX(-50%) rotate(90deg); }
+    40% { transform: translateX(-50%) rotate(-45deg); }
+    60% { transform: translateX(-50%) rotate(180deg); }
+    80%, 100% { transform: translateX(-50%) rotate(0deg); }
+}
+@keyframes blinkLed {
+    0%, 70% { background: #e74c3c; box-shadow: 0 0 5px #e74c3c; }
+    75%, 90% { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+    100% { background: #e74c3c; box-shadow: 0 0 5px #e74c3c; }
+}
