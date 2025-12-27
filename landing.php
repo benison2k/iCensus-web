@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to iCensus</title>
     
     <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
     
-    <link rel="stylesheet" href="/public/assets/css/landing-page.css">
+    <link rel="stylesheet" href="/public/assets/css/landing/layout.css">
+    <link rel="stylesheet" href="/public/assets/css/landing/components.css">
+    <link rel="stylesheet" href="/public/assets/css/landing/sections.css">
+    <link rel="stylesheet" href="/public/assets/css/landing/graphics.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
