@@ -90,6 +90,27 @@
         .carousel-slide img:hover {
             transform: scale(1.02);
         }
+
+        /* ====================================
+           FAQ Animation Styles (Added)
+        ==================================== */
+        details.faq-item {
+            overflow: hidden; /* Essential for height animation */
+            transition: height 0.3s ease-out;
+            height: auto;
+            will-change: height;
+        }
+
+        /* Hide the answer initially (opacity) to fade it in */
+        details.faq-item .answer {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* When open, fade in the answer */
+        details.faq-item[open] .answer {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -650,6 +671,73 @@
             if (event.key === "Escape" && modal.style.display === "flex") {
                 closeModal();
             }
+        });
+
+        /* =================================
+           FAQ Smooth Animation Logic (Added)
+        ==================================== */
+        document.querySelectorAll('details.faq-item').forEach((detail) => {
+            detail.addEventListener('click', (e) => {
+                // Only run logic if the click comes from the summary element
+                if (e.target.closest('summary')) {
+                    e.preventDefault(); // Stop default instant toggle behavior
+
+                    const summary = detail.querySelector('summary');
+                    const content = detail.querySelector('.answer');
+
+                    // Check if closing or opening
+                    if (detail.hasAttribute('open')) {
+                        // --- CLOSING ---
+                        // 1. Lock the current height
+                        const startHeight = detail.offsetHeight;
+                        detail.style.height = `${startHeight}px`;
+
+                        // 2. Force reflow
+                        void detail.offsetHeight;
+
+                        // 3. Calculate target height (just the summary height)
+                        // We use getComputedStyle to account for any padding on the details element itself
+                        const style = window.getComputedStyle(detail);
+                        const collapsedHeight = summary.offsetHeight + 
+                                                parseFloat(style.paddingTop) + 
+                                                parseFloat(style.paddingBottom);
+
+                        // 4. Animate to collapsed height
+                        detail.style.height = `${collapsedHeight}px`;
+
+                        // 5. Remove attribute after animation ends
+                        detail.addEventListener('transitionend', function onEnd() {
+                            detail.removeAttribute('open');
+                            detail.style.height = null; // Clean up inline style
+                            detail.removeEventListener('transitionend', onEnd);
+                        }, { once: true });
+
+                    } else {
+                        // --- OPENING ---
+                        // 1. Set starting height explicitly
+                        const startHeight = detail.offsetHeight;
+                        detail.style.height = `${startHeight}px`;
+
+                        // 2. Add 'open' attribute so content renders (hidden by overflow)
+                        detail.setAttribute('open', '');
+                        
+                        // 3. Calculate target full height
+                        const targetHeight = detail.scrollHeight;
+
+                        // 4. Force reflow
+                        void detail.offsetHeight;
+
+                        // 5. Animate to full height
+                        detail.style.height = `${targetHeight}px`;
+
+                        // 6. Cleanup after animation
+                        detail.addEventListener('transitionend', function onEnd() {
+                            detail.style.height = null;
+                            detail.removeEventListener('transitionend', onEnd);
+                        }, { once: true });
+                    }
+                }
+            });
         });
     </script>
 </body>

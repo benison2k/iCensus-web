@@ -1091,3 +1091,22 @@ main > section.hero {
     cursor: zoom-in;
     transition: transform 0.3s ease;
 }
+
+/* Update the FAQ Item to handle height transitions */
+details.faq-item {
+    overflow: hidden; /* Critical for the height animation to work */
+    transition: height 0.3s ease-out, background-color 0.3s ease;
+    height: auto; /* Default state */
+}
+
+/* Disable the existing jumpy animation on the answer text */
+details.faq-item .answer {
+    animation: none !important;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Smoothly fade in the answer when open */
+details.faq-item[open] .answer {
+    opacity: 1;
+}
