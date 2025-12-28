@@ -36,6 +36,12 @@
     color: #2C3E50;
     z-index: 1000; /* Ensure it stays above other content */
     position: relative;
+    
+    /* Ensure flex column layout for better spacing of logo and text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Explicit Light Mode (Optional, but good for switching) */
@@ -49,6 +55,19 @@ body.dark-mode .footer {
     background-color: #2C3E50;
     color: #ffffff;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.3); /* Slightly darker shadow for dark mode */
+}
+
+/* ========================
+   Footer Logo
+======================== */
+.footer-logo {
+    width: 50px;           /* Size of the circle */
+    height: 50px;          /* Must match width */
+    border-radius: 50%;    /* Makes it circular */
+    object-fit: cover;     /* Prevents logo distortion */
+    background-color: transparent; /* Removes the "white circle" background */
+    margin-bottom: 10px;   /* Adds space between logo and copyright text */
+    display: inline-block;
 }
 
 /* ========================
