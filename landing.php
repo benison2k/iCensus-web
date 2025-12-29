@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to iCensus</title>
-    
+    <meta name="description" content="iCensus: A secure digital census management system for Barangays. Streamline resident profiling, analytics, and community reporting.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>">
+    <meta property="og:title" content="iCensus - Digital Barangay Management">
+    <meta property="og:description" content="Streamline resident profiling, generate instant reports, and build a better-informed community.">
+    <meta property="og:image" content="/public/assets/img/dashboard.png">
+
     <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
     
     <link rel="stylesheet" href="/public/assets/css/landing/layout.css">
@@ -12,110 +21,8 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <style>
-        /* Lightbox Modal Styles */
-        .image-modal {
-            display: none; /* Hidden by default */
-            position: fixed; 
-            z-index: 2000; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: hidden; 
-            background-color: rgba(0,0,0,0.9); 
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: auto;
-            max-width: 90%;
-            max-height: 85vh;
-            border-radius: 4px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.5);
-            animation: zoomIn 0.3s ease forwards;
-            object-fit: contain;
-        }
-
-        #modalCaption {
-            margin-top: 15px;
-            color: #ccc;
-            font-size: 1.1rem;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        @keyframes zoomIn {
-            from {transform: scale(0.9); opacity: 0;} 
-            to {transform: scale(1); opacity: 1;}
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-            z-index: 2001;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .close-modal:hover,
-        .close-modal:focus {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.3);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Update Carousel Images to indicate clickability */
-        .carousel-slide img {
-            cursor: zoom-in;
-            transition: transform 0.3s ease;
-        }
-        
-        .carousel-slide img:hover {
-            transform: scale(1.02);
-        }
-
-        /* ====================================
-           FAQ Animation Styles (Added)
-        ==================================== */
-        details.faq-item {
-            overflow: hidden; /* Essential for height animation */
-            transition: height 0.3s ease-out;
-            height: auto;
-            will-change: height;
-        }
-
-        /* Hide the answer initially (opacity) to fade it in */
-        details.faq-item .answer {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        /* When open, fade in the answer */
-        details.faq-item[open] .answer {
-            opacity: 1;
-        }
-    </style>
 </head>
-<body>
+<body id="home">
 
     <canvas id="particleCanvas"></canvas>
 
@@ -123,6 +30,7 @@
         <div class="container header-container">
             <img src="/public/assets/img/iCensusLogo.png" alt="iCensus Logo" class="logo">
             <nav class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
                 <a href="#security" class="nav-link">Security</a>
@@ -131,7 +39,7 @@
                     <span class="material-icons" style="font-size: 18px;">login</span> Member Login
                 </a>
             </nav>
-            <button class="mobile-toggle" id="mobileToggle">
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
                 <span class="material-icons">menu</span>
             </button>
         </div>
@@ -146,7 +54,10 @@
                         <p class="hero-subtitle">
                             Welcome to iCensus. Streamline resident profiling, generate instant reports, and build a better-informed community with our secure digital platform.
                         </p>
-                        <a href="/login" class="btn-cta">Access the Portal</a>
+                        <div class="hero-buttons">
+                            <a href="/login" class="btn-cta">Access the Portal</a>
+                            <a href="#features" class="btn-cta btn-secondary">Learn More</a>
+                        </div>
                     </div>
                     <div class="hero-visual-content">
                         <div class="carousel-wrapper">
@@ -470,277 +381,6 @@
         <div id="modalCaption"></div>
     </div>
 
-    <script>
-        const header = document.getElementById('header');
-        const backToTopBtn = document.getElementById('backToTop');
-
-        window.addEventListener('scroll', () => {
-            // Header Scroll Logic
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-
-            // Back to Top Button Logic
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-
-        // Click event to scroll smoothly to top
-        if(backToTopBtn) {
-            backToTopBtn.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        }
-
-        // Mobile Menu Toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.querySelector('.nav-menu');
-        
-        if(mobileToggle){
-            mobileToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-        }
-
-        // Particle animation script
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight; 
-        }
-
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            initParticles();
-        });
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 1;
-                this.speedX = Math.random() * 0.8 - 0.4;
-                this.speedY = Math.random() * 0.8 - 0.4;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particlesArray = [];
-            let numberOfParticles = (canvas.width * canvas.height) / 9000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-
-        // Scroll-triggered animations
-        const sections = document.querySelectorAll('.fade-in-section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                }
-            });
-        }, { threshold: 0.1 });
-        sections.forEach(section => observer.observe(section));
-
-        // Carousel Logic
-        const initCarousel = () => {
-            const slidesContainer = document.querySelector('.carousel-slides');
-            if (!slidesContainer) return;
-
-            const slides = document.querySelectorAll('.carousel-slide');
-            const prevBtn = document.querySelector('.carousel-btn.prev');
-            const nextBtn = document.querySelector('.carousel-btn.next');
-            const dotsContainer = document.querySelector('.carousel-dots');
-            const captionEl = document.querySelector('.carousel-caption-external');
-            let currentSlide = 0;
-            let slideInterval;
-
-            const showSlide = (n) => {
-                currentSlide = (n + slides.length) % slides.length;
-                slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-                
-                document.querySelectorAll('.carousel-dot').forEach(dot => dot.classList.remove('active'));
-                dotsContainer.children[currentSlide].classList.add('active');
-
-                // Update external caption
-                if (captionEl) {
-                    captionEl.textContent = slides[currentSlide].dataset.caption;
-                }
-                
-                clearInterval(slideInterval);
-                slideInterval = setInterval(() => showSlide(currentSlide + 1), 5000);
-            };
-
-            slides.forEach((_, i) => {
-                const dot = document.createElement('span');
-                dot.classList.add('carousel-dot');
-                dot.addEventListener('click', () => showSlide(i));
-                dotsContainer.appendChild(dot);
-            });
-
-            prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
-            nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
-            
-            showSlide(0);
-        };
-
-        // Initial setup
-        resizeCanvas();
-        initParticles();
-        animateParticles();
-        initCarousel();
-
-        /* =================================
-           Lightbox Logic
-        ==================================== */
-        const modal = document.getElementById("lightboxModal");
-        const modalImg = document.getElementById("expandedImage");
-        const captionText = document.getElementById("modalCaption");
-        const closeBtn = document.querySelector(".close-modal");
-        
-        // Select all images inside carousel slides
-        const carouselImages = document.querySelectorAll('.carousel-slide img');
-
-        if (carouselImages.length > 0) {
-            carouselImages.forEach(img => {
-                img.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Prevent clicking through to other elements
-                    modal.style.display = "flex"; // Show modal using flex to center content
-                    modalImg.src = this.src; // Set modal image source
-                    
-                    // Optional: Set caption from the parent slide's data attribute
-                    const slideParent = this.closest('.carousel-slide');
-                    if(slideParent && slideParent.dataset.caption) {
-                        captionText.textContent = slideParent.dataset.caption;
-                    } else {
-                        captionText.textContent = "";
-                    }
-                });
-            });
-        }
-
-        // Close Modal Function
-        function closeModal() {
-            modal.style.display = "none";
-        }
-
-        // Event Listeners for Closing
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeModal);
-        }
-
-        // Close if user clicks anywhere outside the image (the background)
-        if (modal) {
-            modal.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-        }
-        
-        // Close on Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape" && modal.style.display === "flex") {
-                closeModal();
-            }
-        });
-
-        /* =================================
-           FAQ Smooth Animation Logic (Added)
-        ==================================== */
-        document.querySelectorAll('details.faq-item').forEach((detail) => {
-            detail.addEventListener('click', (e) => {
-                // Only run logic if the click comes from the summary element
-                if (e.target.closest('summary')) {
-                    e.preventDefault(); // Stop default instant toggle behavior
-
-                    const summary = detail.querySelector('summary');
-                    const content = detail.querySelector('.answer');
-
-                    // Check if closing or opening
-                    if (detail.hasAttribute('open')) {
-                        // --- CLOSING ---
-                        // 1. Lock the current height
-                        const startHeight = detail.offsetHeight;
-                        detail.style.height = `${startHeight}px`;
-
-                        // 2. Force reflow
-                        void detail.offsetHeight;
-
-                        // 3. Calculate target height (just the summary height)
-                        // We use getComputedStyle to account for any padding on the details element itself
-                        const style = window.getComputedStyle(detail);
-                        const collapsedHeight = summary.offsetHeight + 
-                                                parseFloat(style.paddingTop) + 
-                                                parseFloat(style.paddingBottom);
-
-                        // 4. Animate to collapsed height
-                        detail.style.height = `${collapsedHeight}px`;
-
-                        // 5. Remove attribute after animation ends
-                        detail.addEventListener('transitionend', function onEnd() {
-                            detail.removeAttribute('open');
-                            detail.style.height = null; // Clean up inline style
-                            detail.removeEventListener('transitionend', onEnd);
-                        }, { once: true });
-
-                    } else {
-                        // --- OPENING ---
-                        // 1. Set starting height explicitly
-                        const startHeight = detail.offsetHeight;
-                        detail.style.height = `${startHeight}px`;
-
-                        // 2. Add 'open' attribute so content renders (hidden by overflow)
-                        detail.setAttribute('open', '');
-                        
-                        // 3. Calculate target full height
-                        const targetHeight = detail.scrollHeight;
-
-                        // 4. Force reflow
-                        void detail.offsetHeight;
-
-                        // 5. Animate to full height
-                        detail.style.height = `${targetHeight}px`;
-
-                        // 6. Cleanup after animation
-                        detail.addEventListener('transitionend', function onEnd() {
-                            detail.style.height = null;
-                            detail.removeEventListener('transitionend', onEnd);
-                        }, { once: true });
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="/public/assets/js/landing.js" defer></script>
 </body>
 </html>
