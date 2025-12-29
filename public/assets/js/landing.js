@@ -30,9 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Mobile Menu Toggle ---
+    // --- Mobile Menu Toggle & Auto-Close ---
     const mobileToggle = document.getElementById('mobileToggle');
     const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
     
     if(mobileToggle){
         mobileToggle.addEventListener('click', () => {
@@ -40,8 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+            }
+        });
+    });
+
     // --- Active Navigation State (ScrollSpy) ---
-    const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('section');
 
     const navObserver = new IntersectionObserver((entries) => {
