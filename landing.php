@@ -1,3 +1,12 @@
+<?php 
+// Configuration for Base URL and Versioning
+// Set this to your subfolder path if deployed in a subdirectory (e.g., '/icensus')
+$baseUrl = ''; 
+
+// Use time() for development to bust cache. 
+// For production, change this to a static string like '1.0.0'
+$ver = time(); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,14 +19,18 @@
     <meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>">
     <meta property="og:title" content="iCensus - Digital Barangay Management">
     <meta property="og:description" content="Streamline resident profiling, generate instant reports, and build a better-informed community.">
-    <meta property="og:image" content="/public/assets/img/dashboard.png">
+    <meta property="og:image" content="<?= $baseUrl ?>/public/assets/img/dashboard.png">
 
-    <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
-    
-    <link rel="stylesheet" href="/public/assets/css/landing/layout.css">
-    <link rel="stylesheet" href="/public/assets/css/landing/components.css">
-    <link rel="stylesheet" href="/public/assets/css/landing/sections.css">
-    <link rel="stylesheet" href="/public/assets/css/landing/graphics.css">
+    <link rel="icon" type="image/png" href="<?= $baseUrl ?>/public/assets/img/iCensusLogoOnly2.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $baseUrl ?>/public/assets/img/iCensusLogoOnly2.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/assets/css/landing/layout.css?v=<?= $ver ?>">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/assets/css/landing/components.css?v=<?= $ver ?>">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/assets/css/landing/sections.css?v=<?= $ver ?>">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/assets/css/landing/graphics.css?v=<?= $ver ?>">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -28,14 +41,14 @@
 
     <header class="header" id="header">
         <div class="container header-container">
-            <img src="/public/assets/img/iCensusLogo.png" alt="iCensus Logo" class="logo">
+            <img src="<?= $baseUrl ?>/public/assets/img/iCensusLogo.png" alt="iCensus Logo" class="logo">
             <nav class="nav-menu">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
                 <a href="#security" class="nav-link">Security</a>
                 <a href="#faq" class="nav-link">FAQ</a>
-                <a href="/login" class="btn-login">
+                <a href="<?= $baseUrl ?>/login" class="btn-login">
                     <span class="material-icons" style="font-size: 18px;">login</span> Member Login
                 </a>
             </nav>
@@ -55,7 +68,7 @@
                             Welcome to iCensus. Streamline resident profiling, generate instant reports, and build a better-informed community with our secure digital platform.
                         </p>
                         <div class="hero-buttons">
-                            <a href="/login" class="btn-cta">Access the Portal</a>
+                            <a href="<?= $baseUrl ?>/login" class="btn-cta">Access the Portal</a>
                             <a href="#features" class="btn-cta btn-secondary">Learn More</a>
                         </div>
                     </div>
@@ -64,13 +77,13 @@
                             <div class="carousel-container">
                                 <div class="carousel-slides">
                                     <div class="carousel-slide" data-caption="Dashboard Overview">
-                                        <img src="/public/assets/img/dashboard.png" alt="Dashboard View">
+                                        <img src="<?= $baseUrl ?>/public/assets/img/dashboard.png" alt="Dashboard View">
                                     </div>
                                     <div class="carousel-slide" data-caption="Residents Management">
-                                        <img src="/public/assets/img/residents.png" alt="Residents Management View">
+                                        <img src="<?= $baseUrl ?>/public/assets/img/residents.png" alt="Residents Management View">
                                     </div>
                                     <div class="carousel-slide" data-caption="Data Analytics & Reports">
-                                        <img src="/public/assets/img/analytics.png" alt="Analytics View">
+                                        <img src="<?= $baseUrl ?>/public/assets/img/analytics.png" alt="Analytics View">
                                     </div>
                                 </div>
                                 <button class="carousel-btn prev" title="Previous">&#10094;</button>
@@ -342,7 +355,7 @@
             <div class="container">
                 <h2>Ready to Get Started?</h2>
                 <p>Access the secure portal to begin managing your community's census data.</p>
-                <a href="/login" class="btn-cta">Access the Portal</a>
+                <a href="<?= $baseUrl ?>/login" class="btn-cta">Access the Portal</a>
             </div>
         </section>
     </main>
@@ -350,7 +363,7 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-brand">
-                <img src="/public/assets/img/iCensusLogoOnly2.png" alt="iCensus" class="footer-logo">
+                <img src="<?= $baseUrl ?>/public/assets/img/iCensusLogoOnly2.png" alt="iCensus" class="footer-logo">
                 <p>Empowering barangays with digital census solutions.</p>
             </div>
             <div class="footer-links">
@@ -359,7 +372,7 @@
                 <a href="#features">Features</a>
                 <a href="#security">Security</a>
                 <a href="#faq">FAQ</a>
-                <a href="/login">Login</a>
+                <a href="<?= $baseUrl ?>/login">Login</a>
             </div>
             <div class="footer-contact">
                  <h4>Contact</h4>
@@ -381,6 +394,6 @@
         <div id="modalCaption"></div>
     </div>
 
-    <script src="/public/assets/js/landing.js" defer></script>
+    <script src="<?= $baseUrl ?>/public/assets/js/landing.js?v=<?= $ver ?>" defer></script>
 </body>
 </html>
