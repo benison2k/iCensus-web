@@ -363,7 +363,7 @@ $ver = time();
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-brand">
-                <img src="<?= $baseUrl ?>/public/assets/img/iCensusLogoOnly2.png" alt="iCensus" class="footer-logo">
+                <img src="<?= $baseUrl ?>/public/assets/img/iCensusLogo.png" alt="iCensus" class="footer-logo" style="width: auto; height: 50px; border-radius: 0;">
                 <p>Empowering barangays with digital census solutions.</p>
             </div>
             <div class="footer-links">
