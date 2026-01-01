@@ -10,6 +10,7 @@ $usernameValue = $data['usernameValue'] ?? '';
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iCensus Login</title>
 <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -32,6 +33,7 @@ $usernameValue = $data['usernameValue'] ?? '';
         <p class="hero-subtitle">Accurate. Fast. Reliable.</p>
     </div>
     <div class="divider-shadow"></div>
+    
     <div class="right-side d-flex justify-content-center align-items-center">
         <div class="login-card">
             <div class="card-header text-center mb-3">
@@ -93,7 +95,6 @@ $usernameValue = $data['usernameValue'] ?? '';
 </div>
 
 <script>
-    // FIX 3: Base URL for JS logic (API calls) should be empty to match the router
     const BASE_URL = '<?= $base_url ?>';
 </script>
 <script src="/public/assets/js/login.js"></script>
