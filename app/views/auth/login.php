@@ -35,8 +35,14 @@ $usernameValue = $data['usernameValue'] ?? '';
     <div class="divider-shadow"></div>
     
     <div class="right-side d-flex justify-content-center align-items-center">
+        <a href="<?= $base_url ?>/home" class="home-link mobile-home-link" title="Back to Home">
+            <span class="material-icons">home</span>
+        </a>
+
         <div class="login-card">
             <div class="card-header text-center mb-3">
+                <img src="/public/assets/img/iCensusLogoOnly2.png" alt="iCensus Logo" class="mobile-logo-card">
+                
                 <h1 class="hero-title">Sign in</h1>
                 <p class="text-muted">Please enter your credentials</p>
             </div>

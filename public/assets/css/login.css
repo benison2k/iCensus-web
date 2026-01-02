@@ -9,15 +9,17 @@ body, html {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 2. Desktop Layout (Default) */
+/* 2. Desktop Layout (Default > 900px) */
 .split-screen {
     display: flex;
     height: 100vh;
     width: 100%;
+    overflow: hidden; /* Prevent scroll on desktop */
 }
 
+/* LEFT SIDE - Branding */
 .left-side {
-    flex: 1;
+    flex: 1.2; /* Give slightly more space to graphics on wide screens */
     background: linear-gradient(135deg, #0d6efd, #6c63ff);
     color: white;
     display: flex;
@@ -25,9 +27,10 @@ body, html {
     justify-content: center;
     align-items: center;
     position: relative;
-    overflow: hidden; /* Ensures particles don't spill out */
+    overflow: hidden;
 }
 
+/* RIGHT SIDE - Form */
 .right-side {
     flex: 1;
     background-color: #f8f9fa;
@@ -37,48 +40,59 @@ body, html {
     position: relative;
 }
 
-/* --- FIX: Restored Particle Canvas Styles --- */
+/* Particle Canvas */
 #particleCanvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Behind text but above background */
+    z-index: 1;
 }
 
 /* Desktop Elements */
 .hero-logo { 
     max-width: 300px; 
     height: auto; 
-    z-index: 2; /* Above particles */
+    z-index: 2; 
     margin-bottom: 1rem; 
     position: relative;
+    transition: max-width 0.3s ease; /* Smooth scaling */
 }
 .hero-subtitle { 
     font-size: 1.3rem; 
     margin-bottom: 2rem; 
-    z-index: 2; /* Above particles */
+    z-index: 2; 
     position: relative;
+    transition: font-size 0.3s ease;
 }
 
-/* Background Shapes */
-.shape { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.1); z-index: 1; }
+/* Hide Mobile Elements on Desktop */
+.mobile-logo-card { display: none; } 
+.mobile-home-link { display: none; }
+
+/* Background Shapes (Animated slightly) */
+.shape { 
+    position: absolute; 
+    border-radius: 50%; 
+    background: rgba(255,255,255,0.1); 
+    z-index: 1; 
+}
 .shape1 { width: 140px; height: 140px; top: 10%; left: 15%; }
 .shape2 { width: 100px; height: 100px; bottom: 15%; right: 20%; }
 .shape3 { width: 180px; height: 180px; top: 35%; left: 50%; }
 
-.mobile-logo-card { display: none; } /* Hide small logo on desktop */
 .home-link { 
     position: absolute; 
     top: 2rem; 
     left: 2rem; 
     font-size: 2rem; 
-    color: #fff; /* White on desktop */
+    color: #fff; 
     z-index: 10; 
     text-decoration: none; 
+    transition: opacity 0.2s;
 }
-.home-link:hover { color: #f8f9fa; }
+.home-link:hover { opacity: 0.8; }
 
 /* Desktop Card */
 .login-card {
@@ -86,16 +100,17 @@ body, html {
     max-width: 400px;
     padding: 2rem;
     background: transparent;
+    transition: all 0.3s ease;
 }
 
-/* Inputs (Desktop) */
+/* Inputs (Global) */
 .input-wrapper {
     position: relative;
     margin-bottom: 1.5rem;
 }
 .input-wrapper input {
     width: 100%;
-    padding: 0.8rem 1rem 0.8rem 3rem; /* Space for icon */
+    padding: 0.8rem 1rem 0.8rem 3rem; 
     border-radius: 12px;
     border: 1px solid #dee2e6;
     background: #fff;
@@ -143,87 +158,114 @@ body, html {
     box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
 }
 
-/* Error Text */
 .error-text { color: #dc3545; font-size: 0.875rem; text-align: center; margin-top: 5px; }
 .form-control.error { border-color: #dc3545 !important; }
 
-
 /* =========================================
-   3. MOBILE OVERHAUL (iPhone 11 & similar)
+   3. RESPONSIVE BREAKPOINTS
    ========================================= */
+
+/* --- A. Laptop / Small Desktop (900px - 1366px) --- */
+@media screen and (min-width: 901px) and (max-width: 1366px) {
+    /* Balance the split 50/50 */
+    .left-side { flex: 1; }
+    
+    /* Scale down hero graphics so they don't dominate */
+    .hero-logo { max-width: 220px; margin-bottom: 0.5rem; }
+    .hero-subtitle { font-size: 1.1rem; }
+    
+    /* Scale down background shapes */
+    .shape1 { width: 100px; height: 100px; }
+    .shape3 { width: 140px; height: 140px; }
+
+    /* Compact the form slightly */
+    .login-card { padding: 1.5rem; max-width: 360px; }
+    .card-header h1 { font-size: 2rem; }
+}
+
+/* --- B. Tablet & Mobile (Max Width 900px) --- */
 @media screen and (max-width: 900px) {
     
-    /* Force Full Screen Blue Background */
     body {
         background: linear-gradient(135deg, #0d6efd, #6c63ff) !important;
         overscroll-behavior-y: none; 
     }
 
     .split-screen {
-        display: block; /* Remove flex split */
-        height: 100dvh; /* Dynamic height for iOS address bar */
+        display: block; 
+        height: auto;
+        min-height: 100dvh;
         width: 100%;
-        overflow-y: auto; /* Allow scrolling */
-        background: transparent;
     }
 
-    /* Hide the entire Left Side (Old branding) */
-    .left-side {
-        display: none !important;
+    /* Completely hide Left Side */
+    .left-side { display: none !important; }
+    
+    /* Reveal Mobile Home Link */
+    .mobile-home-link {
+        display: block;
+        color: rgba(255,255,255,0.9);
+        top: 1.5rem;
+        left: 1.5rem;
+        position: absolute;
     }
 
     /* Right Side becomes the Container */
     .right-side {
-        display: block;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 100%;
-        height: 100%;
+        min-height: 100dvh;
         background: transparent !important;
-        padding: 1.5rem;
-        padding-top: 4rem; /* Space from top */
+        padding: 2rem 1.5rem;
+        box-sizing: border-box;
     }
 
-    /* Home Link white on mobile */
-    .home-link {
-        color: rgba(255,255,255,0.8);
-        top: 1.5rem;
-        left: 1.5rem;
-    }
-
-    /* The White Floating Card */
+    /* The White Card */
     .login-card {
         background: #ffffff;
         border-radius: 24px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        padding: 2rem 1.5rem;
-        margin: 0 auto;
-        /* Centering vertically if screen is tall */
-        margin-top: calc(50dvh - 280px); 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        padding: 2.5rem 2rem;
+        width: 100%;
+        max-width: 400px; /* Standard width */
+        margin: 0;
+        animation: floatUp 0.6s ease-out forwards;
+    }
+    
+    @keyframes floatUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Show Logo Inside Card on Mobile */
+    /* Logo inside Card */
     .mobile-logo-card {
         display: inline-block;
-        width: 60px;
+        width: 70px;
         height: auto;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .card-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.75rem;
         font-weight: 700;
         color: #333;
+        margin-bottom: 0.2rem;
     }
-
-    /* Thumb-Friendly Inputs */
+    
+    /* Touch-Friendly Inputs */
     .input-wrapper input {
-        height: 56px; /* 56px is standard mobile touch target */
-        font-size: 16px; /* Prevents auto-zoom on iPhone */
-        background-color: #f8f9fa;
-        border: 2px solid #eff0f2;
+        height: 56px; 
+        font-size: 16px; 
+        background-color: #f0f2f5;
+        border: 2px solid #eff0f2; /* Subtle border */
     }
     .input-wrapper input:focus {
         background-color: #fff;
         border-color: #0d6efd;
+        box-shadow: none;
     }
 
     .btn-primary {
@@ -231,42 +273,64 @@ body, html {
         font-size: 1.1rem;
         box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
     }
-    
-    .forgot-link {
-        display: inline-block;
-        padding: 10px;
-        color: #6c757d;
-        text-decoration: none;
-    }
 }
 
-/* OTP Modal Styling */
+/* --- C. Specific Tablet Adjustments (iPad Portrait) --- */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    .login-card {
+        max-width: 480px; /* Wider card for tablets looks better */
+        padding: 3rem 2.5rem;
+    }
+    .mobile-logo-card { width: 90px; } /* Larger logo */
+    .card-header h1 { font-size: 2rem; }
+}
+
+/* --- D. Small Mobile (iPhone SE, Older Androids) --- */
+@media screen and (max-width: 380px) {
+    .right-side { padding: 1rem; } /* Less outer padding */
+    
+    .login-card {
+        padding: 1.5rem 1.2rem; /* Tighten card padding */
+        border-radius: 20px;
+    }
+    
+    .card-header h1 { font-size: 1.5rem; }
+    .hero-subtitle { font-size: 0.9rem; }
+    
+    .mobile-logo-card { width: 55px; }
+    
+    .input-wrapper input { height: 48px; font-size: 15px; }
+    .btn-primary { height: 48px; font-size: 1rem; }
+}
+
+/* OTP Modal Styling (Responsive) */
 #otpModal {
     z-index: 1000;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     padding-top: 0;
-    display: flex !important; /* Override default block to use flex centering */
+    display: flex !important; 
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-}
-#otpModal[style*="display: block"] {
-    opacity: 1;
-    pointer-events: auto;
 }
 
 #otpModal .modal-content {
     width: 90%;
-    max-width: 400px;
+    max-width: 360px;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 2rem;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    margin: auto; /* Important for centering */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    margin: auto;
+    border: none;
 }
+
+/* Adjust OTP Modal for small screens */
+@media screen and (max-width: 380px) {
+    #otpModal .modal-content { padding: 1.5rem 1rem; }
+    .otp-input { width: 35px; height: 45px; font-size: 1.2rem; }
+}
+
 .otp-container {
     display: flex;
     justify-content: center;
@@ -280,11 +344,10 @@ body, html {
     text-align: center;
     border: 1px solid #ced4da;
     border-radius: 8px;
+    background: #f8f9fa;
 }
-#resendOtpBtn {
-    display: block;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    color: #666;
-    text-decoration: underline;
+.otp-input:focus {
+    border-color: #0d6efd;
+    outline: none;
+    background: #fff;
 }
