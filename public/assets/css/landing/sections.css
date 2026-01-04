@@ -1,3 +1,5 @@
+/* public/assets/css/landing/sections.css */
+
 /* =================================
    Page Sections
 ==================================== */
@@ -19,7 +21,11 @@
 .impact-item p { font-size: 0.95rem; opacity: 0.85; }
 
 /* --- Features --- */
-.features { padding: 6rem 0; }
+/* UPDATED: Uses the Main Blue Gradient */
+.features { 
+    padding: 6rem 0; 
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); 
+}
 .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 .feature-card {
     background-color: var(--bg-white); padding: 2.5rem 2rem; border-radius: 12px;
@@ -33,7 +39,7 @@
     background-color: var(--accent-light); margin-bottom: 1.5rem;
     position: relative; overflow: hidden;
 }
-.feature-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem; }
+.feature-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-dark); }
 .feature-description { font-size: 0.95rem; color: #555; }
 
 /* --- How It Works --- */
@@ -45,7 +51,7 @@
     display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
     position: relative; overflow: hidden;
 }
-.step-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; }
+.step-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
 .step-arrow { font-size: 2rem; color: #ccc; margin-top: 3rem; }
 @media (max-width: 768px) {
     .process-wrapper { flex-direction: column; align-items: center; }
@@ -53,11 +59,17 @@
 }
 
 /* --- Roles --- */
-.role-section { padding: 6rem 0; }
+/* UPDATED: Uses the Main Blue Gradient & White Text */
+.role-section { 
+    padding: 6rem 0; 
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); 
+    color: white; 
+}
 .role-row { display: flex; align-items: center; gap: 4rem; margin-bottom: 4rem; }
 .role-row:last-child { margin-bottom: 0; }
 .role-text, .role-img-container { flex: 1; }
-.role-text h3 { font-size: 2rem; margin-bottom: 1rem; }
+.role-text h3 { font-size: 2rem; margin-bottom: 1rem; color: white; }
+.role-text p { opacity: 0.9; }
 .role-row.reverse { flex-direction: row-reverse; }
 @media (max-width: 992px) {
     .role-row, .role-row.reverse { flex-direction: column; gap: 2rem; }
@@ -82,9 +94,31 @@
 }
 
 /* --- FAQ & CTA --- */
-.faq-section { padding: 6rem 0; background-color: var(--bg-white); }
+/* UPDATED: Uses the Main Blue Gradient & White Text */
+.faq-section { 
+    padding: 6rem 0; 
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); 
+    color: white;
+}
 .faq-grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
 
-.cta-section { padding: 5rem 0; text-align: center; background-color: var(--bg-white); border-top: 1px solid #eee; }
-.cta-section h2 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-dark); }
+/* FAQ Item Styling for Dark Background */
+.faq-item { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1rem; }
+.faq-item:last-child { border-bottom: none; }
+.question-text { color: white; font-weight: 500; }
+.toggle-icon { color: white; opacity: 0.8; }
+.answer p { color: rgba(255,255,255,0.9); margin-top: 0.5rem; }
+
+.cta-section { 
+    padding: 5rem 0; 
+    text-align: center; 
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); 
+    border-top: none;
+    color: white;
+}
+.cta-section h2 { 
+    font-size: 2.5rem; 
+    margin-bottom: 1rem; 
+    color: white;
+}
 .cta-section p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; }
