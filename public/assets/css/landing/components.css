@@ -1,3 +1,5 @@
+/* public/assets/css/landing/components.css */
+
 /* =================================
    Interactive Components 
    (Buttons, Carousel, Modal, FAQ)
@@ -251,22 +253,29 @@
 .back-to-top:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
 .back-to-top .material-icons { font-size: 24px; }
 
-/* --- Animated FAQ Accordion --- */
+/* --- Animated FAQ Accordion (Updated for Dark Blue Background) --- */
 details.faq-item {
-    background: var(--bg-light); border-radius: 8px; padding: 0.5rem 1.5rem;
-    transition: height 0.3s ease-out, background-color 0.3s ease; 
+    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px; padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease; 
     cursor: pointer; overflow: hidden; height: auto; will-change: height;
+    color: white; /* Ensure text is white */
 }
-details.faq-item:hover { background: #eee; }
+details.faq-item:hover { background: rgba(255, 255, 255, 0.2); }
 details.faq-item summary {
     display: flex; justify-content: space-between; align-items: center;
     padding: 1rem 0; font-weight: 600; list-style: none;
+    color: white; /* Summary text white */
 }
 details.faq-item[open] .toggle-icon { transform: rotate(180deg); }
-.toggle-icon { transition: transform 0.3s ease; }
+.toggle-icon { transition: transform 0.3s ease; color: white; }
 .answer { 
-    padding-bottom: 1rem; color: var(--text-muted); 
-    border-top: 1px solid #ddd; padding-top: 1rem; margin-top: 0.5rem;
+    padding-bottom: 1rem; 
+    color: rgba(255, 255, 255, 0.9); /* Answer text off-white */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Separator */
+    padding-top: 1rem; margin-top: 0.5rem;
     opacity: 0; transition: opacity 0.3s ease-in-out;
 }
 details.faq-item[open] .answer { opacity: 1; }
