@@ -308,7 +308,6 @@ body, html {
     z-index: 1000;
     background: rgba(0,0,0,0.6);
     padding-top: 0;
-    display: flex !important; 
     align-items: center;
     justify-content: center;
 }
