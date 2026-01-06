@@ -63,8 +63,13 @@ class User {
     }
 
     public function find($id) {
-        // UPDATED: Added sidebar_pinned to the selection
-        $stmt = $this->pdo->prepare("SELECT id, username, full_name, role_id, sidebar_pinned FROM users WHERE id = ?");
+        // FIXED: Added JOIN to roles table to retrieve role_name so frontend displays it correctly
+        $stmt = $this->pdo->prepare("
+            SELECT users.id, users.username, users.full_name, users.role_id, users.sidebar_pinned, roles.role_name 
+            FROM users 
+            LEFT JOIN roles ON users.role_id = roles.id 
+            WHERE users.id = ?
+        ");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
