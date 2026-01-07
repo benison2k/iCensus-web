@@ -63,6 +63,7 @@ $usernameValue = $data['usernameValue'] ?? '';
                 </div>
                 <div class="input-wrapper mb-3">
                     <input type="password" name="password" id="passwordField" class="form-control <?= $error ? 'error' : '' ?>" placeholder="Password">
+                    <span class="material-icons input-icon">lock</span>
                     <span class="material-icons password-toggle" id="togglePassword">visibility_off</span>
                 </div>
                 <div class="error-text" id="loginError" style="margin-bottom: 1rem;"><?= $error ?></div>
