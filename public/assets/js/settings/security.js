@@ -427,7 +427,8 @@ function initOtpModal(modalId, helpers, message, cooldown) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
     const form = modal.querySelector('form');
-    const input = modal.querySelector('input[name="otp"]');
+    // NOTE: This now finds the hidden input for 6-box modals
+    const input = modal.querySelector('input[name="otp"]'); 
     const errorEl = modal.querySelector('.error-text');
     const resendBtn = modal.querySelector('a[id^="resend"]');
     const cooldownTimer = modal.querySelector('span[id^="cooldown"]');
@@ -460,22 +461,30 @@ function initOtpModal(modalId, helpers, message, cooldown) {
     errorEl.textContent = message;
     errorEl.style.color = '#0d6efd';
     input.value = '';
+    // NEW: Clear visual inputs if they exist
+    const otpVisualInputs = modal.querySelectorAll('.otp-input');
+    otpVisualInputs.forEach(i => i.value = '');
+
     modal.style.display = 'flex';
-    input.focus();
+    
+    // Focus logic: try to focus first visual input, else fallback to hidden/regular input
+    if (otpVisualInputs.length > 0) {
+        otpVisualInputs[0].focus();
+    } else {
+        input.focus();
+    }
+    
     startCountdown(cooldown);
 
-    // --- START OTP 6-BOX LOGIC ---
-    // Check if this modal is the one we are fixing (otpBindModal)
-    if (modalId === 'otpBindModal') {
-        const otpContainer = document.getElementById('otpBindContainer');
+    // --- START OTP 6-BOX LOGIC (Generalized) ---
+    const otpContainer = modal.querySelector('.otp-container');
+    if (otpContainer) {
         const otpInputs = otpContainer.querySelectorAll('.otp-input');
-        const hiddenOtpInput = document.getElementById('otpBindInput'); // This is our hidden input
+        // The 'input' variable already references the hidden input field because we query by name="otp"
+        const hiddenOtpInput = input;
 
-        // Focus the first box
-        if(otpInputs.length > 0) otpInputs[0].focus();
-
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
+        otpInputs.forEach((inp, index) => {
+            inp.addEventListener('input', (e) => {
                 const value = e.target.value;
                 
                 // Handle paste
@@ -494,16 +503,16 @@ function initOtpModal(modalId, helpers, message, cooldown) {
                 }
                 
                 // Combine all values into the hidden input for form submission
-                hiddenOtpInput.value = Array.from(otpInputs).map(inp => inp.value).join('');
+                hiddenOtpInput.value = Array.from(otpInputs).map(i => i.value).join('');
             });
 
-            input.addEventListener('keydown', (e) => {
-                if (e.key === "Backspace" && input.value === "" && index > 0) {
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === "Backspace" && inp.value === "" && index > 0) {
                     otpInputs[index - 1].focus();
                 }
                 // Also update hidden input on backspace
                 setTimeout(() => {
-                        hiddenOtpInput.value = Array.from(otpInputs).map(inp => inp.value).join('');
+                        hiddenOtpInput.value = Array.from(otpInputs).map(i => i.value).join('');
                 }, 0);
             });
         });

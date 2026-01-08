@@ -109,11 +109,17 @@
         <span class="close" id="closeOtpToggleModal">&times;</span>
         <h3 style="margin-top: 0; text-align: center;">Confirm Disable 2FA</h3>
         <p class="text-muted" style="text-align: center;">Enter the 6-digit code sent to your email to confirm you want to disable Two-Factor Authentication.</p>
-        <form id="otpToggleForm" action="<?= $base_url ?>/settings/verify-2fa-toggle-otp" method="POST" style="margin-top: 1.5rem;">
+        <form id="otpToggleForm" action="<?= $base_url ?>/settings/verify-2fa-toggle-otp" method="POST" style="margin-top: 1.5rem; margin-bottom: 1rem;">
             <?= Csrf::getField(); ?>
-            <div class="input-wrapper mb-3" style="display: flex; justify-content: center;">
-                <input type="text" name="otp" id="otpToggleInput" class="form-control" placeholder="______" required autofocus maxlength="6" pattern="\d{6}" inputmode="numeric">
+            <div class="otp-container" id="otpToggleContainer">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
             </div>
+            <input type="hidden" name="otp" id="otpToggleInput" required>
             <div class="error-text" id="otpToggleError" style="margin-bottom: 1rem;"></div>
             <button type="submit" class="btn btn-primary w-100 mb-3" id="otpToggleVerifyBtn">Confirm Disable</button>
         </form>
