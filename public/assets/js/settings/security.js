@@ -320,6 +320,7 @@ function init2FAToggle(helpers) {
             }
         }
 
+        // Disable the switch immediately to prevent spamming
         this.disabled = true;
         
         // --- NEW: Include token in params ---
@@ -339,32 +340,37 @@ function init2FAToggle(helpers) {
             if (result.status === 'success') {
                 showAjaxResult(result.message, 'success');
                 twoFaLabel.textContent = isChecked ? 'Enabled' : 'Disabled';
-                this.disabled = false;
+                this.disabled = false; // Re-enable immediately if no OTP needed
             } else if (result.status === 'otp_required') {
-                this.checked = true; 
+                this.checked = true; // Visually stay "on" while verifying disable request
                 initOtpModal('otpToggleModal', {
                     ...helpers, 
                     resendUrl: BASE_URL + '/settings/toggleTwoFA',
                     resendBody: new URLSearchParams({ target_two_fa: 0, csrf_token: csrfToken }), // Re-send token on retry
-                    onCloseReload: true
+                    onCloseReload: true,    // Reload if cancelled to reset switch state
+                    onSuccessReload: true   // Reload on success to reflect new "Disabled" state
                 }, result.message, COOLDOWN_DURATION);
+                // Switch remains disabled here
             } else if (result.status === 'cooldown') {
                 this.checked = true; 
                 initOtpModal('otpToggleModal', {
                     ...helpers, 
                     resendUrl: BASE_URL + '/settings/toggleTwoFA',
                     resendBody: new URLSearchParams({ target_two_fa: 0, csrf_token: csrfToken }), // Re-send token on retry
-                    onCloseReload: true
+                    onCloseReload: true,
+                    onSuccessReload: true
                 }, result.message, result.cooldown_remaining);
+                // Switch remains disabled here
             } else {
+                // Generic error
                 this.checked = !isChecked;
                 showAjaxResult(result.message, 'error');
-                this.disabled = false;
+                this.disabled = false; // Re-enable on error
             }
         } catch (error) {
             this.checked = !isChecked;
             showAjaxResult('A network error occurred. Please try again.', 'error');
-            this.disabled = false;
+            this.disabled = false; // Re-enable on network error
         }
     });
 }
