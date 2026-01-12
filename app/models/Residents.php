@@ -148,66 +148,30 @@ class Resident {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // --- SECURITY FIX: Whitelist implementation for Mass Assignment Protection ---
     public function save($data) {
-        // 1. Define the "Safe List" of columns that users are allowed to edit.
-        $allowed_fields = [
-            'first_name', 'middle_name', 'last_name', 'suffix', 'nickname',
-            'dob', 'gender', 'civil_status', 'nationality', 'religion', 'blood_type',
-            'house_no', 'street', 'purok', 'household_no', 'residency_status', 'years_in_barangay',
-            'contact_number', 'email',
-            'occupation', 'educational_attainment', 'monthly_income',
-            'is_voter', 'voter_id',
-            'is_pwd', 'pwd_id', 'is_solo_parent', 'solo_parent_id', 'is_4ps_member', '4ps_id',
-            'emergency_name', 'emergency_contact',
-            'relationship', 'head_of_household', 'ownership_status',
-            // 'encoded_by' is allowed here for NEW records (set by Controller), 
-            // but we will strip it for updates below.
-            'encoded_by'
-        ];
-
-        // 2. Filter the input data against the whitelist
-        $clean_data = array_intersect_key($data, array_flip($allowed_fields));
-
         if (empty($data['resident_id'])) {
-            // --- CREATE NEW RESIDENT ---
+            // Create new resident
+            $data['date_added'] = date('Y-m-d H:i:s');
+            unset($data['resident_id']);
             
-            // Force safe defaults for system fields
-            $clean_data['date_added'] = date('Y-m-d H:i:s');
-            $clean_data['approval_status'] = 'pending'; // ALWAYS force pending for new entries
-            $clean_data['approval_date'] = null;
-            $clean_data['approved_by'] = null;
-            
-            // Construct the SQL safely using only whitelisted keys
-            $fields = array_keys($clean_data);
+            $fields = array_keys($data);
             $placeholders = array_fill(0, count($fields), '?');
             
             $stmt = $this->pdo->prepare("INSERT INTO residents (" . implode(",", $fields) . ") VALUES (" . implode(",", $placeholders) . ")");
-            $stmt->execute(array_values($clean_data));
-            
+            $stmt->execute(array_values($data));
             return $this->pdo->lastInsertId();
         } else {
-            // --- UPDATE EXISTING RESIDENT ---
-            
+            // Update existing resident
             $id = $data['resident_id'];
-            $clean_data['last_updated'] = date('Y-m-d H:i:s');
+            unset($data['resident_id']);
+            $data['last_updated'] = date('Y-m-d H:i:s');
             
-            // Security: Prevent changing the original encoder or hijacking the record
-            if (isset($clean_data['encoded_by'])) {
-                unset($clean_data['encoded_by']);
-            }
-
-            // Construct SQL for Update
-            $setStr = implode(',', array_map(fn($f) => "$f=?", array_keys($clean_data)));
+            $setStr = implode(',', array_map(fn($f) => "$f=?", array_keys($data)));
             
             $stmt = $this->pdo->prepare("UPDATE residents SET $setStr WHERE id = ?");
-            
-            // Combine values for the SET clause with the ID for the WHERE clause
-            $values = array_values($clean_data);
+            $values = array_values($data);
             $values[] = $id;
-            
             $stmt->execute($values);
-            
             return $id;
         }
     }
