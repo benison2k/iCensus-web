@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iCensus - Database Tools</title>
-<link rel="icon" type="image/png" href="/iCensus-ent/public/assets/img/iCensusLogoOnly2.png">
-<link rel="stylesheet" href="/iCensus-ent/public/assets/css/style.css">
-<link rel="stylesheet" href="/iCensus-ent/public/assets/css/settings.css">
-<link rel="stylesheet" href="/iCensus-ent/public/assets/css/modal.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCensus - Database Tools</title>
+    
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>/public/assets/img/iCensusLogoOnly2.png">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/settings.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/modal.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="<?= BASE_URL ?>/public/assets/js/modal.js"></script>
 </head>
 <body class="<?= $theme==='dark'?'dark-mode':''; ?>">
 
@@ -27,7 +30,8 @@ endif; ?>
         <span class="material-icons card-icon">cloud_download</span>
         <h3 class="card-title">Database Backup</h3>
         <p>Create a full backup of the system database.</p>
-        <form action="/iCensus-ent/public/sysadmin/db-tools/process" method="POST">
+        
+        <form action="<?= BASE_URL ?>/sysadmin/db-tools/process" method="POST">
             <?= Csrf::getField(); ?>
             <button type="submit" name="action" value="backup_db">
                 <span class="material-icons">download</span> Run Backup

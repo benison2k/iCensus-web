@@ -11,9 +11,55 @@ class SysadminController {
 
     private function requireSysadmin() {
         if (!isset($_SESSION['user']) || $_SESSION['user']['role_name'] !== 'System Admin') {
-            header("Location: /iCensus-ent/public/login");
+            header("Location: " . BASE_URL . "/login");
             exit;
         }
+    }
+
+    // --- NEW: Helper function to backup DB using only PHP (No exec needed) ---
+    private function generateBackup($db, $filePath) {
+        // Increase limits for backup generation
+        ini_set('memory_limit', '256M');
+        set_time_limit(300); // 5 minutes max
+
+        $pdo = $db->getPdo();
+        $handle = fopen($filePath, 'w+');
+        if (!$handle) throw new Exception("Could not open file for writing: $filePath");
+
+        // Write Header
+        fwrite($handle, "-- iCensus Database Backup\n");
+        fwrite($handle, "-- Generated: " . date('Y-m-d H:i:s') . "\n");
+        fwrite($handle, "SET FOREIGN_KEY_CHECKS=0;\n\n");
+
+        // Get All Tables
+        $tables = [];
+        $query = $pdo->query('SHOW TABLES');
+        while ($row = $query->fetch(PDO::FETCH_NUM)) {
+            $tables[] = $row[0];
+        }
+
+        foreach ($tables as $table) {
+            // 1. Save Table Structure
+            $row = $pdo->query('SHOW CREATE TABLE `' . $table . '`')->fetch(PDO::FETCH_NUM);
+            fwrite($handle, "DROP TABLE IF EXISTS `$table`;\n");
+            fwrite($handle, $row[1] . ";\n\n");
+
+            // 2. Save Table Data
+            $rows = $pdo->query('SELECT * FROM `' . $table . '`');
+            while ($row = $rows->fetch(PDO::FETCH_ASSOC)) {
+                $values = array_map(function ($value) use ($pdo) {
+                    if ($value === null) return 'NULL';
+                    return $pdo->quote($value);
+                }, $row);
+                
+                $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($row)) . "`) VALUES (" . implode(', ', $values) . ");\n";
+                fwrite($handle, $sql);
+            }
+            fwrite($handle, "\n\n");
+        }
+
+        fwrite($handle, "SET FOREIGN_KEY_CHECKS=1;\n");
+        fclose($handle);
     }
 
     public function dashboard() {
@@ -60,7 +106,6 @@ class SysadminController {
     public function processUser() {
         $this->requireSysadmin();
         
-        // --- NEW: CSRF Check ---
         if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
                 header('Content-Type: application/json');
@@ -68,10 +113,9 @@ class SysadminController {
                 exit;
             }
             $_SESSION['modal'] = ['message' => 'Security Token Expired.', 'type' => 'error'];
-            header("Location: /iCensus-ent/public/sysadmin/users");
+            header("Location: " . BASE_URL . "/sysadmin/users");
             exit;
         }
-        // -----------------------
         
         $config = require __DIR__ . '/../../config/database.php';
         $db = new Database($config);
@@ -154,7 +198,7 @@ class SysadminController {
             $_SESSION['modal'] = ['message' => 'An error occurred: ' . $e->getMessage(), 'type' => 'error'];
         }
         
-        header("Location: /iCensus-ent/public/sysadmin/users");
+        header("Location: " . BASE_URL . "/sysadmin/users");
         exit;
     }
 
@@ -186,15 +230,19 @@ class SysadminController {
     }
     
     public function processDbTools() {
+        // --- TEMPORARY DEBUGGING (Remove after it works) ---
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $this->requireSysadmin();
         
-        // --- NEW: CSRF Check Added ---
+        // --- CSRF Check ---
         if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
             $_SESSION['modal'] = ['message' => 'Security Token Expired.', 'type' => 'error'];
-            header("Location: /iCensus-ent/public/sysadmin/db-tools");
+            header("Location: " . BASE_URL . "/sysadmin/db-tools");
             exit;
         }
-        // -----------------------------
         
         $config = require __DIR__ . '/../../config/database.php';
         $db = new Database($config);
@@ -204,40 +252,36 @@ class SysadminController {
         try {
             if ($action === 'backup_db') {
                 $backupDir = __DIR__ . '/../../backups/';
+                
+                // 1. Check if folder exists & create if needed
                 if (!is_dir($backupDir)) {
-                    mkdir($backupDir, 0777, true);
+                    if (!mkdir($backupDir, 0755, true)) {
+                         throw new Exception("Backup folder missing and could not be created.");
+                    }
                 }
+
+                // 2. Check Permissions
+                if (!is_writable($backupDir)) {
+                    throw new Exception("Permission Denied: The 'backups' folder is not writable.");
+                }
+
                 $backupFile = $backupDir . 'icensus_db_' . date('Y-m-d_H-i-s') . '.sql';
 
-                $mysql_path = "C:\\xampp\\mysql\\bin\\mysqldump";
-                $command = sprintf(
-                    '"%s" --user=%s --password=%s --host=%s %s > %s',
-                    $mysql_path,
-                    $config['user'],
-                    $config['password'],
-                    $config['host'],
-                    $config['dbname'],
-                    $backupFile
-                );
-                
-                system($command, $return_var);
+                // 3. EXECUTE PHP BACKUP (Replaces exec/mysqldump)
+                $this->generateBackup($db, $backupFile);
 
-                if ($return_var === 0) {
-                    log_action('INFO', 'DB_BACKUP', 'Database backup successful.');
-                    $_SESSION['modal'] = ['message' => 'Database backup successful.', 'type' => 'success'];
-                } else {
-                     throw new Exception("Backup command failed with return code: $return_var");
-                }
+                log_action('INFO', 'DB_BACKUP', 'Database backup successful.');
+                $_SESSION['modal'] = ['message' => 'Database backup successful.', 'type' => 'success'];
 
             } else {
                 throw new Exception('Invalid action.');
             }
-        } catch (Exception $e) {
-            log_action('ERROR', 'DB_BACKUP_FAIL', 'Database backup failed: ' . $e->getMessage());
-            $_SESSION['modal'] = ['message' => 'An error occurred during backup. Check system logs for details.', 'type' => 'error'];
+        } catch (Throwable $e) {
+            log_action('ERROR', 'DB_BACKUP_FAIL', 'Backup Error: ' . $e->getMessage());
+            $_SESSION['modal'] = ['message' => 'Error: ' . $e->getMessage(), 'type' => 'error'];
         }
     
-        header("Location: /iCensus-ent/public/sysadmin/db-tools");
+        header("Location: " . BASE_URL . "/sysadmin/db-tools");
         exit;
     }
 
