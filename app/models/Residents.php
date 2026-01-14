@@ -4,16 +4,44 @@
 class Resident {
     private $pdo;
 
+    // --- SECURITY: Whitelist of allowed fields for Mass Assignment Protection ---
+    protected $fillable = [
+        'first_name', 'middle_name', 'last_name', 'suffix', 'alias',
+        'dob', 'gender', 'civil_status', 
+        'nationality', 'residency_status', 'religion',
+        'blood_type',
+        'house_no', 'street', 'purok', 'household_no', 
+        'head_of_household', 'relationship', 'ownership_status',
+        'occupation', 'monthly_income', 'educational_attainment',
+        'contact_number', 'email', 
+        'emergency_name', 'emergency_contact',
+        'is_pwd', 'is_solo_parent', 'is_4ps_member',
+        'voter_status', 'precinct_no', 
+        'national_id_no', 'philhealth_no', 'sss_no', 'tin_no',
+        'encoded_by' // Allowed: Controller sets this from the session
+    ];
+
     public function __construct(Database $db) {
         $this->pdo = $db->getPdo();
     }
 
     /**
      * Generic function to get distinct, non-empty values from a column.
-     * @param string $column The name of the column.
-     * @return array
+     * Includes security check to prevent SQL injection via column name.
      */
     public function getDistinctValues($column) {
+        // Validation: Whitelist allowed columns for dynamic selection
+        $allowed_columns = [
+            'civil_status', 'blood_type', 'nationality', 'residency_status', 
+            'relationship', 'educational_attainment', 'occupation', 'ownership_status',
+            'street', 'purok', 'gender'
+        ];
+        
+        if (!in_array($column, $allowed_columns)) {
+            // Return empty if invalid column is requested (Security Fail-safe)
+            return [];
+        }
+
         $stmt = $this->pdo->prepare("
             SELECT DISTINCT {$column} 
             FROM residents 
@@ -58,7 +86,6 @@ class Resident {
 
     /**
      * Fetches all APPROVED residents from the database for the main view.
-     * @return array
      */
     public function getAll() {
         $sql = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) as age 
@@ -71,7 +98,6 @@ class Resident {
 
     /**
      * Fetches all residents awaiting approval.
-     * @return array
      */
     public function getPending() {
         $sql = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) as age 
@@ -124,14 +150,6 @@ class Resident {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * NEW: Checks if a resident with the same name and birthdate already exists.
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $dob
-     * @param int|null $excludeId (Optional) Exclude a specific ID (for updates)
-     * @return array|false
-     */
     public function findDuplicate($firstName, $lastName, $dob, $excludeId = null) {
         $sql = "SELECT id, first_name, last_name, dob, approval_status 
                 FROM residents 
@@ -148,28 +166,55 @@ class Resident {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * SECURE SAVE METHOD (Fixes Mass Assignment Vulnerability)
+     */
     public function save($data) {
+        // 1. FILTER: Only allow keys that are in the $fillable whitelist
+        $safeData = array_intersect_key($data, array_flip($this->fillable));
+
+        // 2. SANITIZE: Convert empty strings to NULL for database consistency
+        foreach ($safeData as $key => $value) {
+            if ($value === '') $safeData[$key] = null;
+        }
+
         if (empty($data['resident_id'])) {
-            // Create new resident
-            $data['date_added'] = date('Y-m-d H:i:s');
-            unset($data['resident_id']);
+            // --- CREATE MODE ---
             
-            $fields = array_keys($data);
+            // Set system fields that are NOT user-editable
+            $safeData['date_added'] = date('Y-m-d H:i:s');
+            $safeData['created_at'] = date('Y-m-d H:i:s');
+            $safeData['approval_status'] = 'pending'; // Always pending on creation
+            
+            // Ensure encoded_by is captured if provided by Controller
+            if(!isset($safeData['encoded_by']) && isset($data['encoded_by'])) {
+                 $safeData['encoded_by'] = $data['encoded_by'];
+            }
+            
+            $fields = array_keys($safeData);
             $placeholders = array_fill(0, count($fields), '?');
             
             $stmt = $this->pdo->prepare("INSERT INTO residents (" . implode(",", $fields) . ") VALUES (" . implode(",", $placeholders) . ")");
-            $stmt->execute(array_values($data));
+            $stmt->execute(array_values($safeData));
             return $this->pdo->lastInsertId();
+
         } else {
-            // Update existing resident
+            // --- UPDATE MODE ---
             $id = $data['resident_id'];
-            unset($data['resident_id']);
-            $data['last_updated'] = date('Y-m-d H:i:s');
             
-            $setStr = implode(',', array_map(fn($f) => "$f=?", array_keys($data)));
+            // Set update timestamp
+            $safeData['last_updated'] = date('Y-m-d H:i:s');
+            
+            // Protect immutable fields during update
+            unset($safeData['created_at']);
+            unset($safeData['date_added']);
+            unset($safeData['encoded_by']); 
+            unset($safeData['approval_status']); // Prevent self-approval via edit
+            
+            $setStr = implode(',', array_map(fn($f) => "$f=?", array_keys($safeData)));
             
             $stmt = $this->pdo->prepare("UPDATE residents SET $setStr WHERE id = ?");
-            $values = array_values($data);
+            $values = array_values($safeData);
             $values[] = $id;
             $stmt->execute($values);
             return $id;
