@@ -67,8 +67,16 @@ body, html {
     transition: font-size 0.3s ease;
 }
 
+/* Login Logo (UPDATED SIZE) */
+.login-logo {
+    display: inline-block;
+    width: 60px; /* Reduced from 80px */
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 50%; 
+}
+
 /* Hide Mobile Elements on Desktop */
-.mobile-logo-card { display: none; } 
 .mobile-home-link { display: none; }
 
 /* Background Shapes (Animated slightly) */
@@ -240,11 +248,9 @@ body, html {
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Logo inside Card */
-    .mobile-logo-card {
-        display: inline-block;
-        width: 70px;
-        height: auto;
+    /* Resize Logo for Mobile Card (UPDATED SIZE) */
+    .login-logo {
+        width: 50px; /* Reduced from 70px */
         margin-bottom: 0.5rem;
     }
 
@@ -281,7 +287,7 @@ body, html {
         max-width: 480px; /* Wider card for tablets looks better */
         padding: 3rem 2.5rem;
     }
-    .mobile-logo-card { width: 90px; } /* Larger logo */
+    .login-logo { width: 70px; } /* Reduced from 90px */
     .card-header h1 { font-size: 2rem; }
 }
 
@@ -297,7 +303,7 @@ body, html {
     .card-header h1 { font-size: 1.5rem; }
     .hero-subtitle { font-size: 0.9rem; }
     
-    .mobile-logo-card { width: 55px; }
+    .login-logo { width: 40px; } /* Reduced from 55px */
     
     .input-wrapper input { height: 48px; font-size: 15px; }
     .btn-primary { height: 48px; font-size: 1rem; }
