@@ -1,6 +1,36 @@
 /* public/assets/css/login.css */
 
-/* 1. Base Reset */
+/* =========================================
+   1. ANIMATION KEYFRAMES (NEW)
+   ========================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================================
+   2. BASE RESET
+   ========================================= */
 body, html {
     margin: 0;
     padding: 0;
@@ -9,7 +39,9 @@ body, html {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 2. Desktop Layout (Default > 900px) */
+/* =========================================
+   3. DESKTOP LAYOUT (Default > 900px)
+   ========================================= */
 .split-screen {
     display: flex;
     height: 100vh;
@@ -58,13 +90,22 @@ body, html {
     margin-bottom: 1rem; 
     position: relative;
     transition: max-width 0.3s ease; /* Smooth scaling */
+    
+    /* ANIMATION ADDED */
+    opacity: 0;
+    animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
 }
+
 .hero-subtitle { 
     font-size: 1.3rem; 
     margin-bottom: 2rem; 
     z-index: 2; 
     position: relative;
     transition: font-size 0.3s ease;
+
+    /* ANIMATION ADDED */
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.4s forwards;
 }
 
 /* Login Logo (UPDATED SIZE) */
@@ -109,13 +150,26 @@ body, html {
     padding: 2rem;
     background: transparent;
     transition: all 0.3s ease;
+
+    /* ANIMATION ADDED */
+    opacity: 0; 
+    animation: fadeInUp 0.8s ease-out 0.1s forwards;
 }
 
 /* Inputs (Global) */
 .input-wrapper {
     position: relative;
     margin-bottom: 1.5rem;
+
+    /* ANIMATION ADDED (Staggered fade in) */
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
 }
+
+/* Stagger delays for inputs so they appear one by one */
+.input-wrapper:nth-of-type(1) { animation-delay: 0.2s; }
+.input-wrapper:nth-of-type(2) { animation-delay: 0.3s; }
+
 .input-wrapper input {
     width: 100%;
     padding: 0.8rem 1rem 0.8rem 3rem; 
@@ -160,6 +214,10 @@ body, html {
     color: white;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+
+    /* ANIMATION ADDED */
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.4s forwards;
 }
 .btn-primary:hover {
     transform: translateY(-2px);
@@ -170,7 +228,7 @@ body, html {
 .form-control.error { border-color: #dc3545 !important; }
 
 /* =========================================
-   3. RESPONSIVE BREAKPOINTS
+   4. RESPONSIVE BREAKPOINTS
    ========================================= */
 
 /* --- A. Laptop / Small Desktop (900px - 1366px) --- */
@@ -240,6 +298,9 @@ body, html {
         width: 100%;
         max-width: 400px; /* Standard width */
         margin: 0;
+        
+        /* Reset opacity for mobile animation */
+        opacity: 0;
         animation: floatUp 0.6s ease-out forwards;
     }
     
