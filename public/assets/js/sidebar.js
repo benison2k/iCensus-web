@@ -29,7 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            openSidebar();
+            // Check if sidebar is currently active to determine action
+            if (sidebar && sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
         });
     }
 
