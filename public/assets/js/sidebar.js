@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function closeSidebar() {
-        if (isPinned()) return; // Do nothing if pinned
+        if (isPinned()) return; 
 
         if (sidebar) sidebar.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
-        body.style.overflow = ''; // Restore scrolling
+        body.style.overflow = ''; 
     }
 
     if (toggleBtn) {
