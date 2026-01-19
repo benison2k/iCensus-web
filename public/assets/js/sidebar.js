@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function closeSidebar() {
-        if (isPinned()) return; // Do nothing if pinned
+        if (isPinned()) return; 
 
         if (sidebar) sidebar.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
-        body.style.overflow = ''; // Restore scrolling
+        body.style.overflow = ''; 
     }
 
     if (toggleBtn) {
@@ -46,14 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.addEventListener('click', closeSidebar);
     }
 
-    // Close on Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && sidebar && sidebar.classList.contains('active')) {
             closeSidebar();
         }
     });
 
-    // Handle Window Resize (Close mobile sidebar if expanding to desktop)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768 && overlay && overlay.classList.contains('active')) {
             closeSidebar();
