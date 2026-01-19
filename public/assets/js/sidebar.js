@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle Window Resize (Close mobile sidebar if expanding to desktop)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768 && overlay && overlay.classList.contains('active')) {
             closeSidebar();
