@@ -1,5 +1,5 @@
 <?php
-// benison2k/icensus-ent/iCensus-ent-development-branch-MVC-/app/views/residents/index.php
+// app/views/residents/index.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -319,7 +319,11 @@ $base_url = '';
     <?php include __DIR__ . '/../components/footer.php'; ?>
 
     <script>
-        const allResidentsData = <?= $isPendingView ? '[]' : json_encode($residents); ?>;
+        // --- SECURITY FIX: Prevent Stored XSS ---
+        // We use JSON_HEX_* flags to escape <, >, ', ", and & characters.
+        const allResidentsData = <?= $isPendingView ? '[]' : json_encode($residents, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+        // ----------------------------------------
+        
         const isPendingView = <?= $isPendingView ? 'true' : 'false' ?>;
         const userRole = '<?= htmlspecialchars($user['role_name']) ?>';
         <?php if ($isPendingView): ?>
@@ -341,7 +345,12 @@ $base_url = '';
         document.addEventListener('DOMContentLoaded', function() {
             const toast = document.createElement('div');
             toast.className = 'toast-notification <?= $modalType ?>';
-            toast.innerHTML = `<span class="material-icons"><?= $modalType === 'success' ? 'check_circle' : 'error' ?></span><p><?= addslashes($modalMessage) ?></p>`;
+            
+            // --- SECURITY FIX: Prevent Reflected XSS ---
+            // Replaced addslashes() with htmlspecialchars() to stop HTML tag injection.
+            toast.innerHTML = `<span class="material-icons"><?= $modalType === 'success' ? 'check_circle' : 'error' ?></span><p><?= htmlspecialchars($modalMessage, ENT_QUOTES) ?></p>`;
+            // -------------------------------------------
+            
             document.body.appendChild(toast);
             
             setTimeout(() => {
