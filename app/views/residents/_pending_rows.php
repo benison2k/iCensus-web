@@ -12,10 +12,26 @@
         <td><?= htmlspecialchars($r['house_no'] . ' ' . $r['street'] . ', Purok ' . $r['purok']) ?></td>
         <td><?= date('M d, Y h:i A', strtotime($r['created_at'])) ?></td>
         <td>
-            <div class="actions-column">
-                <a href="<?= $base_url ?>/residents/approve?id=<?= $r['id'] ?>" class="action-btn btn-approve" title="Approve"><span class="material-icons">check</span></a>
-                <a href="<?= $base_url ?>/residents/reject?id=<?= $r['id'] ?>" class="action-btn btn-reject" title="Decline" onclick="return confirm('Are you sure you want to reject this entry?');"><span class="material-icons">close</span></a>
-                <button class="action-btn btn-view moreBtn" data-id="<?= $r['id'] ?>" title="View Details"><span class="material-icons">visibility</span></button>
+            <div class="actions-column" style="display: flex; gap: 5px;">
+                <form action="<?= $base_url ?>/residents/approve" method="POST" style="margin:0;">
+                    <?= Csrf::getField() ?>
+                    <input type="hidden" name="id" value="<?= $r['id'] ?>">
+                    <button type="submit" class="action-btn btn-approve" title="Approve" style="border:none; cursor:pointer;">
+                        <span class="material-icons">check</span>
+                    </button>
+                </form>
+
+                <form action="<?= $base_url ?>/residents/reject" method="POST" style="margin:0;" onsubmit="return confirm('Are you sure you want to reject this entry?');">
+                    <?= Csrf::getField() ?>
+                    <input type="hidden" name="id" value="<?= $r['id'] ?>">
+                    <button type="submit" class="action-btn btn-reject" title="Decline" style="border:none; cursor:pointer;">
+                        <span class="material-icons">close</span>
+                    </button>
+                </form>
+
+                <button class="action-btn btn-view moreBtn" data-id="<?= $r['id'] ?>" title="View Details">
+                    <span class="material-icons">visibility</span>
+                </button>
             </div>
         </td>
     </tr>
