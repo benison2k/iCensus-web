@@ -285,13 +285,25 @@ class ResidentController {
         return null;
     }
 
+    // --- SECURED METHODS START ---
+
     public function approve() {
         if ($_SESSION['user']['role_name'] !== 'Barangay Admin') { die("Forbidden"); }
+        
+        // 1. Enforce POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die("Method Not Allowed");
+        }
+        // 2. Verify CSRF
+        if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
+            die("Invalid Security Token");
+        }
         
         $db = $this->getDb();
         $residentModel = new Resident($db);
 
-        $residentId = (int)($_GET['id'] ?? 0);
+        // 3. Get ID from POST
+        $residentId = (int)($_POST['id'] ?? 0);
         
         if ($residentId) {
             $residentModel->approve($residentId, $_SESSION['user']['id']);
@@ -306,10 +318,20 @@ class ResidentController {
     public function reject() {
         if ($_SESSION['user']['role_name'] !== 'Barangay Admin') { die("Forbidden"); }
 
+        // 1. Enforce POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die("Method Not Allowed");
+        }
+        // 2. Verify CSRF
+        if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
+            die("Invalid Security Token");
+        }
+
         $db = $this->getDb();
         $residentModel = new Resident($db);
         
-        $residentId = (int)($_GET['id'] ?? 0);
+        // 3. Get ID from POST
+        $residentId = (int)($_POST['id'] ?? 0);
         
         if ($residentId) {
             $residentModel->reject($residentId);
@@ -323,6 +345,15 @@ class ResidentController {
 
     public function approveAll() {
         if ($_SESSION['user']['role_name'] !== 'Barangay Admin') { die("Forbidden"); }
+        
+        // 1. Enforce POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die("Method Not Allowed");
+        }
+        // 2. Verify CSRF
+        if (!Csrf::verify($_POST['csrf_token'] ?? '')) {
+            die("Invalid Security Token");
+        }
         
         $db = $this->getDb();
         $residentModel = new Resident($db);
@@ -340,6 +371,8 @@ class ResidentController {
         exit;
     }
     
+    // --- SECURED METHODS END ---
+
     public function searchHeads() {
         header('Content-Type: application/json');
         $term = $_GET['term'] ?? '';

@@ -1,5 +1,5 @@
 <?php
-// benison2k/icensus-ent/iCensus-ent-development-branch-MVC-/app/views/residents/index.php
+// app/views/residents/index.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iCensus - Residents</title>
 <?php 
-// FIX 1: Set to an empty string. This should be used for router links only.
 $base_url = ''; 
 ?>
 <link rel="icon" type="image/png" href="/public/assets/img/iCensusLogoOnly2.png">
@@ -36,12 +35,12 @@ $base_url = '';
                 </button>
 
                 <?php if ($user['role_name'] === 'Barangay Admin' && $isPendingView && $pending_count > 0): ?>
-                    <a href="<?= $base_url ?>/residents/approve-all"
-                       class="action-button-link"
-                       style="background-color: #28a745; color: white; margin-left: auto;"
-                       onclick="return confirm('Are you sure you want to approve all <?= $pending_count ?> pending entries?');">
-                        <span class="material-icons">done_all</span> Approve All (<?= $pending_count ?>)
-                    </a>
+                    <form action="<?= $base_url ?>/residents/approve-all" method="POST" style="margin-left: auto;" onsubmit="return confirm('Are you sure you want to approve all <?= $pending_count ?> pending entries?');">
+                        <?= Csrf::getField() ?>
+                        <button type="submit" class="action-button-link" style="background-color: #28a745; color: white; border:none; cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <span class="material-icons">done_all</span> Approve All (<?= $pending_count ?>)
+                        </button>
+                    </form>
                 <?php endif; ?>
             </div>
 
@@ -320,7 +319,11 @@ $base_url = '';
     <?php include __DIR__ . '/../components/footer.php'; ?>
 
     <script>
-        const allResidentsData = <?= $isPendingView ? '[]' : json_encode($residents); ?>;
+        // --- SECURITY FIX: Prevent Stored XSS ---
+        // We use JSON_HEX_* flags to escape <, >, ', ", and & characters.
+        const allResidentsData = <?= $isPendingView ? '[]' : json_encode($residents, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+        // ----------------------------------------
+        
         const isPendingView = <?= $isPendingView ? 'true' : 'false' ?>;
         const userRole = '<?= htmlspecialchars($user['role_name']) ?>';
         <?php if ($isPendingView): ?>
@@ -342,7 +345,12 @@ $base_url = '';
         document.addEventListener('DOMContentLoaded', function() {
             const toast = document.createElement('div');
             toast.className = 'toast-notification <?= $modalType ?>';
-            toast.innerHTML = `<span class="material-icons"><?= $modalType === 'success' ? 'check_circle' : 'error' ?></span><p><?= addslashes($modalMessage) ?></p>`;
+            
+            // --- SECURITY FIX: Prevent Reflected XSS ---
+            // Replaced addslashes() with htmlspecialchars() to stop HTML tag injection.
+            toast.innerHTML = `<span class="material-icons"><?= $modalType === 'success' ? 'check_circle' : 'error' ?></span><p><?= htmlspecialchars($modalMessage, ENT_QUOTES) ?></p>`;
+            // -------------------------------------------
+            
             document.body.appendChild(toast);
             
             setTimeout(() => {

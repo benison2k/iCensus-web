@@ -260,6 +260,17 @@ class SysadminController {
                     }
                 }
 
+                // --- SECURITY FIX: Create .htaccess to deny access ---
+                $htaccessFile = $backupDir . '.htaccess';
+                if (!file_exists($htaccessFile)) {
+                    $content = "Order Deny,Allow\nDeny from all\n"; // Apache 2.2
+                    $content .= "Require all denied\n";             // Apache 2.4
+                    if (file_put_contents($htaccessFile, $content) === false) {
+                        log_action('WARNING', 'BACKUP_SECURITY_FAIL', 'Could not create .htaccess in backups folder.');
+                    }
+                }
+                // --- END SECURITY FIX ---
+
                 // 2. Check Permissions
                 if (!is_writable($backupDir)) {
                     throw new Exception("Permission Denied: The 'backups' folder is not writable.");

@@ -38,10 +38,14 @@ class AuthController {
 
         $result = $auth->login($username, $password);
         
-        // --- FIX: Base URL set to empty string for root domain ---
         $base_url = ''; 
 
         if ($result['success']) {
+            // --- SECURITY FIX: Prevent Session Fixation ---
+            // This generates a new session ID for the logged-in user, invalidating the old one.
+            session_regenerate_id(true);
+            // ----------------------------------------------
+
             if ($last_logout) {
                 $_SESSION['user']['last_log_view'] = $last_logout;
             }
@@ -93,13 +97,16 @@ class AuthController {
         
         $result = $auth->verifyOtp($userId, $submittedOtp);
         
-        // --- FIX: Base URL set to empty string ---
         $base_url = '';
 
         if ($result['success']) {
             unset($_SESSION['2fa_required']);
             unset($_SESSION['2fa_user_id']);
             unset($_SESSION['otp_last_sent']); 
+            
+            // --- SECURITY FIX: Prevent Session Fixation (Also for 2FA) ---
+            session_regenerate_id(true);
+            // -------------------------------------------------------------
             
             try {
                 $stmt = $db->getPdo()->prepare("SELECT sidebar_pinned FROM users WHERE id = ?");
