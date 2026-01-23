@@ -7,15 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('closeSidebarBtn');
     const body = document.body;
 
-    // Helper to check if pinned
     const isPinned = () => body.classList.contains('sidebar-pinned');
 
     function openSidebar() {
-        if (isPinned()) return; // Do nothing if pinned
-        
+        if (isPinned()) return; 
         if (sidebar) sidebar.classList.add('active');
         if (overlay) overlay.classList.add('active');
-        body.style.overflow = 'hidden'; // Prevent background scrolling
+        body.style.overflow = 'hidden'; 
     }
 
     function closeSidebar() {
@@ -29,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            // Check if sidebar is currently active to determine action
             if (sidebar && sidebar.classList.contains('active')) {
                 closeSidebar();
             } else {
