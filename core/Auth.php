@@ -26,7 +26,6 @@ class Auth {
         $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // If login fails, log the event and then return the error
         if (!$user || !password_verify($password, $user['password'])) {
             log_action('WARNING', 'USER_LOGIN_FAIL', "Failed login attempt for username: '" . htmlspecialchars($username) . "'");
             return [
