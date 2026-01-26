@@ -39,7 +39,6 @@ class Auth {
         if ($user['two_fa'] == 1 && !empty($user['email'])) {
             $otp_sent = $this->generateAndSendOtp($user['id'], $user['email']);
             
-            // Store user ID for the next verification step
             $_SESSION['2fa_user_id'] = $user['id'];
             $_SESSION['2fa_required'] = true;
             
@@ -53,7 +52,6 @@ class Auth {
             return ['success' => false, 'message' => '2FA_REQUIRED'];
         }
 
-        // Successful login (no 2FA or 2FA disabled)
         $this->setUserSession($user);
         log_action('INFO', 'USER_LOGIN_SUCCESS', "User '" . htmlspecialchars($username) . "' logged in successfully.");
 
