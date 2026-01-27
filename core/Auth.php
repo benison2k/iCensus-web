@@ -11,9 +11,6 @@ class Auth {
         $this->pdo = $db->getPdo();
     }
 
-    /**
-     * Attempt login and return structured result
-     */
     public function login($username, $password) {
         global $db; 
 
