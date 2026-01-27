@@ -18,7 +18,6 @@ Csrf::generate();
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
 
-// --- FIX: Set base_directory to empty string for root domain ---
 $base_directory = ''; 
 
 define('BASE_URL', $protocol . '://' . $host . $base_directory);
