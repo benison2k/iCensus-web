@@ -66,7 +66,6 @@ class Auth {
             'language' => $user['language'] ?? 'en',
             'two_fa' => $user['two_fa'] ?? 0,
             'email' => $user['email'] ?? null,
-            // UPDATED: Persist sidebar preference
             'sidebar_pinned' => $user['sidebar_pinned'] ?? 0 
         ];
         // Ensure LAST_ACTIVITY is set for session timeout
