@@ -150,7 +150,6 @@ class Auth {
 
         // Verify the code
         if (password_verify($submittedOtp, $user['otp'])) {
-            // Success: Clear the used OTP immediately, but DO NOT log the user in.
             $clearStmt = $this->pdo->prepare("UPDATE users SET otp = NULL, otp_expires_at = NULL WHERE id = ?");
             $clearStmt->execute([$userId]);
             
